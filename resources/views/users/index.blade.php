@@ -22,6 +22,7 @@
 
     <div class="panel">
         @if($users->count())
+            <div class="table-responsive">
             <table class="table-list" style="width:100%;">
                 <thead>
                     <tr>

@@ -157,14 +157,28 @@
         font-size: 1.1rem;
         margin-bottom: 1.5rem;
     }
+
+    .receipt-filter-section {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .receipt-filter-section h3 {
+        margin: 0 0 1rem 0;
+        color: #0f172a;
+        font-size: 1rem;
+    }
 </style>
 @endpush
 
 @section('content')
     <!-- Date Filter Section -->
-    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid #e2e8f0;">
-        <h3 style="margin: 0 0 1rem 0; color: #0f172a; font-size: 1rem;">Filter by Date</h3>
-        <form method="GET" action="{{ route('receipts.index') }}" style="display: grid; grid-template-columns: auto auto auto auto auto 1fr; gap: 1rem; align-items: end;">
+    <div class="receipt-filter-section">
+        <h3>Filter by Date</h3>
+        <form method="GET" action="{{ route('receipts.index') }}" class="filter-form">
             <!-- Day Filter -->
             <div>
                 <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #475569;">Day</label>
@@ -205,14 +219,14 @@
             </div>
             
             <!-- Filter Button -->
-            <div style="display: flex; gap: 0.5rem;">
+            <div class="filter-actions">
                 <button type="submit" style="padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Filter</button>
                 <a href="{{ route('receipts.index') }}" style="padding: 0.6rem 1rem; background: #e2e8f0; color: #0f172a; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center;">Reset</a>
             </div>
             
             <!-- Download PDF Button -->
-            <div style="text-align: right;">
-                <button type="button" onclick="downloadReceiptsPDF()" style="padding: 0.6rem 1.2rem; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">Download PDF</button>
+            <div class="filter-actions filter-actions-end">
+                <button type="button" onclick="downloadReceiptsPDF()" style="padding: 0.6rem 1.2rem; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; width: 100%;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">Download PDF</button>
             </div>
         </form>
     </div>
@@ -231,6 +245,7 @@
             <p style="color: #64748b;">Orders will appear here once they are completed.</p>
         </div>
     @else
+        <div class="table-responsive">
         <table class="receipts-table">
             <thead>
                 <tr>
@@ -283,6 +298,7 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     @endif
 
     @push('scripts')

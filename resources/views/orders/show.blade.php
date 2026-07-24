@@ -18,7 +18,7 @@
     .receipt {
         background: white;
         padding: 0.5rem 0.4rem;
-        font-family: 'Courier New', monospace;
+        font-family: 'Courier New', 'Consolas', 'Leelawadee UI', monospace;
         font-size: 0.73rem;
         line-height: 1.2;
         text-align: center;
@@ -167,7 +167,7 @@
             <div class="receipt-address">123 Main Street<br>Phnom Penh, Cambodia</div>
             <div class="receipt-phone">(855) 123-4567</div>
             <div class="divider"></div>
-            <div class="receipt-order-info">Order #: {{ $order->id }} Barista: {{ $order->user->name ?? 'Staff' }}<br>DATE: {{ $order->created_at->format('m/d/Y') }}  TIME: {{ $order->created_at->format('H:i:s A') }}</div>
+            <div class="receipt-order-info">Receipt #: {{ $order->receipt_number }} Barista: {{ $order->user->name ?? 'Staff' }}<br>DATE: {{ $order->created_at->format('m/d/Y') }}  TIME: {{ $order->created_at->format('h:i:s A') }}</div>
             <div class="divider"></div>
             <div class="receipt-items">
 @foreach($order->items as $item)

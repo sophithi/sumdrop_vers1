@@ -26,9 +26,33 @@
 
     .filter-controls {
         display: grid;
-        grid-template-columns: auto auto auto auto 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 1rem;
         align-items: end;
+    }
+
+    .filter-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .report-chart-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    @media (max-width: 768px) {
+        .report-chart-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .chart-container {
+            height: 240px;
+        }
     }
 
     .filter-controls label {
@@ -101,15 +125,10 @@
                 </select>
             </div>
             
-            <div>
+            <div class="filter-actions">
                 <button type="submit" style="padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Filter</button>
-            </div>
-            
-            <div>
                 <a href="{{ route('reports.index') }}" style="padding: 0.6rem 1rem; background: #e2e8f0; color: #0f172a; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block;">Reset</a>
             </div>
-
-            <div></div>
         </form>
         @if(request()->filled('day') || request()->filled('month'))
             <div style="background: #eff6ff; padding: 0.75rem 1rem; border-radius: 8px; margin-top: 1rem; border-left: 4px solid #2563eb; color: #0c4a6e; font-weight: 500;">
@@ -151,7 +170,7 @@
     @if($paymentBreakdown->count() > 0)
     <section class="panel">
         <h3>Payment Method Breakdown</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+        <div class="report-chart-grid">
             <div class="chart-container">
                 <canvas id="paymentMethodChart"></canvas>
             </div>

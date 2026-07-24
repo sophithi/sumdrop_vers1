@@ -23,6 +23,7 @@
 
     <div class="panel">
         @if($products->count())
+            <div class="table-responsive">
             <table class="table-list" style="width:100%;">
                 <thead>
                     <tr>
@@ -73,6 +74,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
         @else
             <div class="empty-state">
                 <p>No products yet.</p>

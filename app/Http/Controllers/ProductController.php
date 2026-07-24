@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -23,6 +23,12 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
+    // Absolute path to public_html/storage/products (sibling folder to this app)
+    protected function imageUploadPath()
+    {
+        return base_path('../public_html/storage/products');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -37,17 +43,25 @@ class ProductController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            $file = $request->file('image');
+            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $destination = $this->imageUploadPath();
+
+            if (!is_dir($destination)) {
+                mkdir($destination, 0755, true);
+            }
+
+            $file->move($destination, $filename);
+            $imagePath = 'products/' . $filename;
         }
 
-        // Set price_usd if not provided (convert from KHR at rate ~4100)
         $priceUsd = $validated['price_usd'] ?? round($validated['price_khr'] / 4100, 2);
-        
+
         Product::create([
             'category_id' => $validated['category_id'],
             'name' => $validated['name'],
             'sku' => $validated['sku'],
-            'price' => $priceUsd, // Store USD as the base price
+            'price' => $priceUsd,
             'price_khr' => $validated['price_khr'],
             'price_usd' => $priceUsd,
             'image' => $imagePath,
@@ -81,25 +95,36 @@ class ProductController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        $imagePath = $product->image; // keep existing by default
+        $imagePath = $product->image;
 
         if ($request->hasFile('image')) {
-            // delete old image from disk if it exists
-            if ($product->image && Storage::disk('public')->exists($product->image)) {
-                Storage::disk('public')->delete($product->image);
+            // delete old image file if it exists
+            if ($product->image) {
+                $oldFile = $this->imageUploadPath() . '/' . basename($product->image);
+                if (file_exists($oldFile)) {
+                    unlink($oldFile);
+                }
             }
 
-            $imagePath = $request->file('image')->store('products', 'public');
+            $file = $request->file('image');
+            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $destination = $this->imageUploadPath();
+
+            if (!is_dir($destination)) {
+                mkdir($destination, 0755, true);
+            }
+
+            $file->move($destination, $filename);
+            $imagePath = 'products/' . $filename;
         }
 
-        // Set price_usd if not provided (convert from KHR at rate ~4100)
         $priceUsd = $validated['price_usd'] ?? round($validated['price_khr'] / 4100, 2);
 
         $product->update([
             'category_id' => $validated['category_id'],
             'name' => $validated['name'],
             'sku' => $validated['sku'],
-            'price' => $priceUsd, // Store USD as the base price
+            'price' => $priceUsd,
             'price_khr' => $validated['price_khr'],
             'price_usd' => $priceUsd,
             'image' => $imagePath,
@@ -111,9 +136,11 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // clean up the image file when the product is deleted
-        if ($product->image && Storage::disk('public')->exists($product->image)) {
-            Storage::disk('public')->delete($product->image);
+        if ($product->image) {
+            $file = $this->imageUploadPath() . '/' . basename($product->image);
+            if (file_exists($file)) {
+                unlink($file);
+            }
         }
 
         $product->delete();

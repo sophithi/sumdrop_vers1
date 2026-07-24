@@ -225,6 +225,90 @@
         margin-right: 0.5rem;
     }
 
+    .pos-toolbar {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .exchange-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 3000;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .exchange-modal-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+    }
+
+    /* Laptop */
+    @media (max-width: 1280px) {
+        .pos-grid {
+            grid-template-columns: 1.45fr 1fr;
+        }
+    }
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+        .pos-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Phone */
+    @media (max-width: 768px) {
+        .product-list {
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        }
+
+        .cart-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .cart-item > div:last-child {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .panel-head {
+            align-items: flex-start;
+        }
+    }
+
+    /* Small phone */
+    @media (max-width: 480px) {
+        .product-list {
+            grid-template-columns: 1fr;
+        }
+
+        .product-card {
+            grid-template-columns: 56px 1fr;
+        }
+
+        .product-thumb,
+        .product-icon {
+            width: 56px;
+            height: 56px;
+        }
+
+        .exchange-modal-content {
+            padding: 1.25rem;
+        }
+    }
+
 </style>
 @endpush
 
@@ -233,7 +317,7 @@
         <section class="panel">
             <div class="panel-head">
                 <h3>Menu</h3>
-                <div style="display: flex; gap: 0.5rem;">
+                <div class="pos-toolbar">
                     <div class="currency-toggle">
                         <button type="button" id="currency-usd" class="currency-btn" onclick="setCurrency('usd')">USD</button>
                         <button type="button" id="currency-khr" class="currency-btn active" onclick="setCurrency('khr')">KHR</button>
@@ -352,8 +436,8 @@
     </div>
 
     <!-- Exchange Rate Modal -->
-    <div id="exchangeRateModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); max-width: 400px; width: 90%;">
+    <div id="exchangeRateModal" class="exchange-modal">
+        <div class="exchange-modal-content">
             <h3 style="margin-top: 0; margin-bottom: 1.5rem; font-size: 1.3rem;">Exchange Rate Settings</h3>
             
             <div style="margin-bottom: 1.5rem;">

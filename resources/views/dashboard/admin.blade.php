@@ -242,12 +242,103 @@
         margin-bottom: 1rem;
     }
 
+    .dashboard-hero {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin-bottom: 2.5rem;
+        color: white;
+        box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);
+    }
+
+    .dashboard-hero-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .dashboard-hero h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .dashboard-hero-status {
+        text-align: right;
+    }
+
+    .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .dashboard-section-header {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .dashboard-section-header h2 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
     @media (max-width: 768px) {
         .overview-grid {
             grid-template-columns: repeat(2, 1fr);
         }
 
         .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-hero {
+            padding: 1.75rem;
+        }
+
+        .dashboard-hero-inner {
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .dashboard-hero h1 {
+            font-size: 1.85rem;
+        }
+
+        .dashboard-section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .metric-value {
+            font-size: 1.65rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .overview-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-hero {
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-hero h1 {
+            font-size: 1.5rem;
+        }
+
+        .quick-actions-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -258,19 +349,19 @@
     @php
         $displayCurrency = request('currency', 'khr');
         $currencySymbol = $displayCurrency === 'khr' ? '៛' : '$';
-        $hour = now()->hour;
-        $greeting = $hour < 12 ? __('dashboard.good_morning') : ($hour < 18 ? __('dashboard.good_afternoon') : __('dashboard.good_evening'));
+        // $hour = now()->hour;
+        // $greeting = $hour < 12 ? __('dashboard.good_morning') : ($hour < 18 ? __('dashboard.good_afternoon') : __('dashboard.good_evening'));
     @endphp
 
     <!-- Welcome Hero Section -->
-    <div style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border-radius: 20px; padding: 2.5rem; margin-bottom: 2.5rem; color: white; box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem;">
+    <div class="dashboard-hero">
+        <div class="dashboard-hero-inner">
             <div>
-                <p style="margin: 0 0 0.5rem 0; font-size: 0.95rem; opacity: 0.9;">{{ $greeting }}</p>
-                <h1 style="margin: 0 0 0.5rem 0; font-size: 2.5rem; font-weight: 700;">{{ auth()->user()?->name ?? 'Welcome' }}</h1>
+               
+                <h1>{{ auth()->user()?->name ?? 'Welcome' }}</h1>
                 <p style="margin: 0; font-size: 1.1rem; opacity: 0.95;">{{ now()->format('l, F j, Y') }}</p>
             </div>
-            <div style="text-align: right;">
+            <div class="dashboard-hero-status">
                 <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; opacity: 0.9;">System Status</p>
                 <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px;">
                     <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
@@ -281,7 +372,7 @@
     </div>
 
     <!-- Quick Actions Section -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+    <div class="quick-actions-grid">
         <a href="{{ route('products.index') }}" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 1.5rem; text-decoration: none; color: #0369a1; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(3, 105, 161, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
             <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Manage Menu</div>
             <div style="font-size: 0.9rem; opacity: 0.7;">View & edit products</div>
@@ -301,13 +392,13 @@
     </div>
 
     <!-- Currency Selector -->
-    <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700;">Today's Performance</h2>
+    <!-- <div class="dashboard-section-header">
+        <h2>Today's Performance</h2>
         <div class="currency-selector">
             <button type="button" id="curr-khr" class="active" onclick="window.location.href='{{ route('dashboard') }}?currency=khr'">៛ KHR (Base)</button>
             <button type="button" id="curr-usd" onclick="window.location.href='{{ route('dashboard') }}?currency=usd'">$ USD</button>
         </div>
-    </div>
+    </div> -->
 
     <!-- Key Metrics -->
     <div class="overview-grid">

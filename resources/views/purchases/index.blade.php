@@ -13,6 +13,7 @@
     @endif
 
     <div class="panel" style="margin-bottom:1rem;">
+        <div class="table-responsive">
         <table class="table-list" style="width:100%;">
             <thead>
                 <tr>

@@ -150,25 +150,6 @@
             background: rgba(96, 165, 250, 0.5);
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .app-shell {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-
-            .app-shell .main {
-                grid-column: auto;
-            }
-        }
-
         .nav-item a {
             display: flex;
             align-items: center;
@@ -210,6 +191,32 @@
             gap: 0.75rem;
         }
 
+        .sidebar-footer-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar-signout-btn {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            background: rgba(248, 113, 113, 0.1);
+            color: #fca5a5;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar-signout-btn:hover {
+            background: #dc2626;
+            color: #fff;
+        }
+
         .sidebar-footer-info strong {
             display: block;
             color: #ffffff;
@@ -231,19 +238,79 @@
         .topbar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             gap: 1rem;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar-left > div {
+            min-width: 0;
         }
 
         .topbar h2 {
             margin: 0;
             font-size: 1.4rem;
             font-weight: 700;
+            line-height: 1.3;
         }
 
         .topbar small {
             color: var(--muted);
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .panel-head h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-responsive .table-list,
+        .table-responsive .receipts-table {
+            min-width: 640px;
+        }
+
+        .filter-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .filter-form .filter-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .filter-form .filter-actions-end {
+            justify-self: end;
         }
 
         .page-top {
@@ -496,8 +563,19 @@
             z-index: 1500;
         }
 
-        @media (max-width:1024px) {
+        /* Laptop */
+        @media (max-width: 1280px) {
+            .main {
+                padding: 1.5rem;
+            }
 
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Tablet & small laptop */
+        @media (max-width: 1024px) {
             .app-shell {
                 display: block;
             }
@@ -527,67 +605,81 @@
 
             .main {
                 margin-left: 0;
-                padding: 18px;
+                padding: 1.125rem;
             }
 
             .menu-toggle {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                flex-shrink: 0;
             }
 
-            .topbar {
-                gap: 15px;
-                flex-wrap: wrap;
+            .field-row {
+                grid-template-columns: 1fr;
             }
-
-            .page-actions {
-                flex-wrap: wrap;
-            }
-
         }
 
         /* Phone */
-
-        @media (max-width:768px) {
-
+        @media (max-width: 768px) {
             .topbar {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
+            }
+
+            .topbar-left {
+                width: 100%;
             }
 
             .page-actions {
                 width: 100%;
+                justify-content: flex-start;
             }
 
+            .page-actions .btn,
             .page-actions form {
+                flex: 1 1 auto;
+            }
+
+            .page-actions #language-select {
                 width: 100%;
             }
 
-            .page-actions .btn {
-                width: 100%;
+            .filter-form .filter-actions-end {
+                justify-self: stretch;
             }
 
+            .filter-form .filter-actions-end button {
+                width: 100%;
+            }
         }
 
         /* Small phone */
-
-        @media (max-width:480px) {
-
+        @media (max-width: 480px) {
             .main {
-                padding: 14px;
+                padding: 0.875rem;
             }
 
             .card,
             .panel {
-                padding: 18px;
+                padding: 1.125rem;
                 border-radius: 16px;
             }
 
             .topbar h2 {
-                font-size: 20px;
+                font-size: 1.25rem;
             }
 
+            .page-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page-actions .btn,
+            .page-actions form,
+            .page-actions #language-select {
+                width: 100%;
+            }
         }
     </style>
     @stack('styles')
@@ -661,6 +753,10 @@
                     <strong>{{ auth()->user()?->name ?? 'User' }}</strong>
                     <span>{{ auth()->user()?->role ? ucfirst(auth()->user()->role) : 'Staff' }}</span>
                 </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="sidebar-signout-btn" title="{{ __('menu.sign_out') }}" aria-label="{{ __('menu.sign_out') }}">⏻</button>
+                </form>
             </div>
         </aside>
 
@@ -668,28 +764,17 @@
 
         <main class="main">
             <div class="topbar">
-                <div>
-                    <h2>@yield('page-title', 'Dashboard')</h2>
-                    @hasSection('page-subtitle')
-                        <small>@yield('page-subtitle')</small>
-                    @endif
+                <div class="topbar-left">
+                    <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+                    <div>
+                        <h2>@yield('page-title', 'Dashboard')</h2>
+                        @hasSection('page-subtitle')
+                            <small>@yield('page-subtitle')</small>
+                        @endif
+                    </div>
                 </div>
                 <div class="page-actions">
                     @yield('page-actions')
-
-                    <!-- Language Switcher -->
-                    <div style="position: relative;">
-                        <select id="language-select"
-                            style="appearance: none; padding-right: 2rem; cursor: pointer; background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 16 16%22><path fill=%22%230f172a%22 d=%22M4.5 6L8 10l3.5-4z%22/></svg>'); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.2rem;">
-                            <option value="en" {{ app()->getLocale() === 'en' ? 'selected' : '' }}>English</option>
-                            <option value="km" {{ app()->getLocale() === 'km' ? 'selected' : '' }}>ខ្មែរ</option>
-                        </select>
-                    </div>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-secondary">{{ __('menu.sign_out') }}</button>
-                    </form>
                 </div>
             </div>
 
@@ -702,7 +787,7 @@
         const toggle = document.getElementById("menuToggle");
         const overlay = document.getElementById("overlay");
 
-        toggle.addEventListener("click", () => {
+        toggle?.addEventListener("click", () => {
             sidebar.classList.toggle("active");
             overlay.classList.toggle("active");
         });
