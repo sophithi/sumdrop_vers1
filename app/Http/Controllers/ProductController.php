@@ -23,10 +23,11 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
-    // Absolute path to public_html/storage/products (sibling folder to this app)
+    // Where product images actually get served from — always the real public
+    // directory, regardless of hosting layout.
     protected function imageUploadPath()
     {
-        return base_path('../public_html/storage/products');
+        return public_path('storage/products');
     }
 
     public function store(Request $request)
