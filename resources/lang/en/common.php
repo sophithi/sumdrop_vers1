@@ -54,6 +54,7 @@ return [
     'pieces' => 'Pieces',
     'pack' => 'Pack',
     'can' => 'Can',
+    'cans' => 'Cans',
     'box' => 'Box',
     'glass' => 'Glass',
     'single' => 'Single',

@@ -386,6 +386,7 @@
         'glass' => __('common.glass'),
         'piece' => __('common.piece'),
         'pieces' => __('common.pieces'),
+        'cans' => __('common.cans'),
         'outOfStock' => __('stock.out_of_stock'),
         'lowStock' => __('stock.low_stock'),
         'inStock' => __('stock.in_stock'),
@@ -428,12 +429,12 @@
         const remainder = stock % packQuantity;
 
         if (cases === 0) {
-            return remainder + ' ' + (remainder === 1 ? stockText.piece : stockText.pieces);
+            return remainder + ' ' + (remainder === 1 ? stockText.can : stockText.cans);
         }
 
         let label = cases + ' ' + stockText.case;
         if (remainder > 0) {
-            label += ' + ' + remainder + ' ' + (remainder === 1 ? stockText.piece : stockText.pieces);
+            label += ' + ' + remainder + ' ' + (remainder === 1 ? stockText.can : stockText.cans);
         }
         return label;
     }

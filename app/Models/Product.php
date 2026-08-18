@@ -150,6 +150,26 @@ class Product extends Model
     }
 
     /**
+     * Alias for sellsByPiece() — most cases here are cases of cans, so views
+     * that talk specifically about "can" pricing read better with this name.
+     * Same underlying price_khr_piece/price_usd_piece columns either way.
+     */
+    public function sellsByCan(): bool
+    {
+        return $this->sellsByPiece();
+    }
+
+    public function getPriceKhrCanAttribute()
+    {
+        return $this->price_khr_piece;
+    }
+
+    public function getPriceUsdCanAttribute()
+    {
+        return $this->price_usd_piece;
+    }
+
+    /**
      * Price for a given sale unit ('case' or 'piece'), regardless of the product's
      * default unit. For non-case products (or a case sold whole) this is just the
      * normal price; for a case product sold by the piece, it's the piece price.
@@ -180,8 +200,8 @@ class Product extends Model
     }
 
     /**
-     * Stock is always tracked in base units (pieces). For case products, show it
-     * in case-and-piece terms (e.g. "9 cases + 15 pcs") since that's how staff think
+     * Stock is always tracked in base units (cans). For case products, show it
+     * in case-and-can terms (e.g. "9 cases + 15 cans") since that's how staff think
      * about it; other products just show the raw count.
      */
     public function stockDisplay(): string
@@ -194,13 +214,13 @@ class Product extends Model
         $remainder = $this->stock % $this->pack_quantity;
 
         if ($cases === 0) {
-            return $remainder . ' ' . __($remainder === 1 ? 'common.piece' : 'common.pieces');
+            return $remainder . ' ' . __($remainder === 1 ? 'common.can' : 'common.cans');
         }
 
         $label = $cases . ' ' . self::unitName($this->unit);
 
         if ($remainder > 0) {
-            $label .= ' + ' . $remainder . ' ' . __($remainder === 1 ? 'common.piece' : 'common.pieces');
+            $label .= ' + ' . $remainder . ' ' . __($remainder === 1 ? 'common.can' : 'common.cans');
         }
 
         return $label;

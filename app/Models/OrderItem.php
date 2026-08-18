@@ -57,8 +57,8 @@ class OrderItem extends Model
     }
 
     /**
-     * Short label for how this line was sold, e.g. "Case" or "Piece" — only
-     * meaningful (and shown) for a case product that was sold by the piece or
+     * Short label for how this line was sold, e.g. "Case" or "Can" — only
+     * meaningful (and shown) for a case product that was sold by the can or
      * whole; blank for ordinary single-unit products and pre-feature rows.
      */
     public function saleUnitLabel(): string
@@ -67,6 +67,6 @@ class OrderItem extends Model
             return '';
         }
 
-        return $this->sale_unit === 'case' ? Product::unitName($this->product->unit) : __('common.piece');
+        return $this->sale_unit === 'case' ? Product::unitName($this->product->unit) : __('common.can');
     }
 }

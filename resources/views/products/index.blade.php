@@ -51,7 +51,7 @@
                                         @if($product->size)
                                             <span class="badge badge-size">{{ $product->size }}</span>
                                         @endif
-                                        @if($product->unit !== 'piece')
+                                        @if($product->unit !== 'can')
                                             <span class="badge badge-unit">{{ $product->getUnitLabel() }}</span>
                                         @endif
                                         <br><small>{{ $product->sku }}</small>
@@ -61,14 +61,14 @@
                             <td>{{ $product->category->name ?? '—' }}</td>
                             <td>
                                 {{ $product->getFormattedPriceKhr() }}
-                                @if($product->sellsByPiece())
-                                    <br><small style="color:#64748b;">{{ __('products.piece_price_prefix') }} ៛{{ number_format($product->price_khr_piece) }}</small>
+                                @if($product->sellsByCan())
+                                    <br><small style="color:#64748b;">{{ __('products.can_price_prefix') }} ៛{{ number_format($product->price_khr_can) }}</small>
                                 @endif
                             </td>
                             <td>
                                 {{ $product->getFormattedPriceUsd() }}
-                                @if($product->sellsByPiece())
-                                    <br><small style="color:#64748b;">{{ __('products.piece_price_prefix') }} ${{ number_format($product->price_usd_piece, 2) }}</small>
+                                @if($product->sellsByCan())
+                                    <br><small style="color:#64748b;">{{ __('products.can_price_prefix') }} ${{ number_format($product->price_usd_can, 2) }}</small>
                                 @endif
                             </td>
                             <td>
