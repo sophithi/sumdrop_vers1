@@ -32,7 +32,7 @@ class UserController extends Controller
 
         User::create($data);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('users.index')->with('success', __('common.user_created'));
     }
 
     public function edit(User $user)
@@ -57,17 +57,17 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('users.index')->with('success', __('common.user_updated'));
     }
 
     public function destroy(User $user)
     {
         if (auth()->user()->id === $user->id) {
-            return back()->with('error', 'You cannot delete your own account.');
+            return back()->with('error', __('common.cannot_delete_own_account'));
         }
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index')->with('success', __('common.user_deleted'));
     }
 }

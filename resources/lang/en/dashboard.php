@@ -68,4 +68,18 @@ return [
     'have_low_stock' => 'have low stock levels. Please review and reorder.',
     'no_customers_yet' => 'No customers yet.',
     'no_items_sold_yet' => 'No items sold yet.',
+
+    // Hero / quick actions
+    'welcome' => 'Welcome',
+    'system_status' => 'System Status',
+    'operational' => 'Operational',
+    'weekly_monthly_overview' => 'Weekly & Monthly Overview',
+    'quick_manage_menu' => 'Manage Menu',
+    'quick_manage_menu_desc' => 'View & edit products',
+    'quick_view_orders' => 'View Orders',
+    'quick_view_orders_desc' => 'Check order status',
+    'quick_recent_receipts' => 'Recent Receipts',
+    'quick_recent_receipts_desc' => 'Print receipts',
+    'quick_view_reports' => 'View Reports',
+    'quick_view_reports_desc' => 'Analytics & insights',
 ];

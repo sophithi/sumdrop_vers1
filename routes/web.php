@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
    
     Route::get('/receipts', [OrderController::class, 'receipts'])->name('receipts.index');
+
+    Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+    Route::get('/stock/data', [StockController::class, 'data'])->name('stock.data');
+    Route::post('/stock/{product}/adjust', [StockController::class, 'adjust'])->name('stock.adjust');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'page_title' => 'ស្តុក',
+    'page_title_full' => 'ការគ្រប់គ្រងស្តុក',
+    'page_subtitle' => 'ទិដ្ឋភាពស្តុកផ្ទាល់ — ធ្វើបច្ចុប្បន្នភាពដោយស្វ័យប្រវត្តិ។',
+    'manage_products' => 'គ្រប់គ្រងផលិតផល',
+    'total_products' => 'ផលិតផលសរុប',
+    'low_stock' => 'ស្តុកទាប',
+    'out_of_stock' => 'អស់ស្តុក',
+    'in_stock' => 'មានស្តុក',
+    'inventory' => 'សារពើភ័ណ្ឌ',
+    'live_prefix' => 'ផ្ទាល់ · ធ្វើបច្ចុប្បន្នភាព',
+    'just_now' => 'ទើបតែឥឡូវនេះ',
+    'search_placeholder' => 'ស្វែងរកផលិតផល…',
+    'other' => 'ផ្សេងទៀត',
+    'table_adjust' => 'លៃតម្រូវ',
+    'add_one_case_title' => 'បន្ថែមប្រអប់ពេញមួយ',
+    'add_case_btn' => '+1 ប្រអប់',
+    'set_to_placeholder' => 'កំណត់ត្រឹម',
+    'no_products_match_filters' => 'រកមិនឃើញផលិតផលត្រូវនឹងតម្រងរបស់អ្នកទេ។',
+    'no_products_yet' => 'មិនទាន់មានផលិតផលនៅឡើយទេ។',
+    'could_not_update_stock' => 'មិនអាចធ្វើបច្ចុប្បន្នភាពស្តុកបានទេ។',
+    'enter_valid_stock' => 'សូមបញ្ចូលចំនួនស្តុកត្រឹមត្រូវ។',
+];

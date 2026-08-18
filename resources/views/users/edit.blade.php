@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit User')
-@section('page-title', 'Edit User')
-@section('page-subtitle', 'Update user details and role.')
+@section('title', __('users.edit_title'))
+@section('page-title', __('users.edit_title'))
+@section('page-subtitle', __('users.edit_subtitle'))
 @section('page-actions')
-    <a href="{{ route('users.index') }}" class="btn btn-secondary">Back to users</a>
+    <a href="{{ route('users.index') }}" class="btn btn-secondary">{{ __('users.back_to_users') }}</a>
 @endsection
 
 @section('content')
     <div class="panel" style="max-width:720px;">
         @if($errors->any())
-            <div class="alert-error">Please fix the errors below.</div>
+            <div class="alert-error">{{ __('common.fix_errors') }}</div>
         @endif
 
         <form method="POST" action="{{ route('users.update', $user) }}">
@@ -18,40 +18,40 @@
             @method('PUT')
 
             <div class="field">
-                <label for="name">Name</label>
+                <label for="name">{{ __('common.name') }}</label>
                 <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required>
                 @error('name')<div class="field-error">{{ $message }}</div>@enderror
             </div>
 
             <div class="field">
-                <label for="email">Email</label>
+                <label for="email">{{ __('common.email') }}</label>
                 <input id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required>
                 @error('email')<div class="field-error">{{ $message }}</div>@enderror
             </div>
 
             <div class="field">
-                <label for="role">Role</label>
+                <label for="role">{{ __('menu.role') }}</label>
                 <select id="role" name="role" required>
-                    <option value="admin" @selected(old('role', $user->role) === 'admin')>Admin</option>
-                    <option value="staff" @selected(old('role', $user->role) === 'staff')>Staff</option>
+                    <option value="admin" @selected(old('role', $user->role) === 'admin')>{{ __('menu.role_admin') }}</option>
+                    <option value="staff" @selected(old('role', $user->role) === 'staff')>{{ __('menu.role_staff') }}</option>
                 </select>
                 @error('role')<div class="field-error">{{ $message }}</div>@enderror
             </div>
 
             <div class="field-row">
                 <div class="field">
-                    <label for="password">New Password</label>
+                    <label for="password">{{ __('users.new_password') }}</label>
                     <input id="password" name="password" type="password">
                     @error('password')<div class="field-error">{{ $message }}</div>@enderror
                 </div>
                 <div class="field">
-                    <label for="password_confirmation">Confirm Password</label>
+                    <label for="password_confirmation">{{ __('users.confirm_password') }}</label>
                     <input id="password_confirmation" name="password_confirmation" type="password">
                 </div>
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn">Save Changes</button>
+                <button type="submit" class="btn">{{ __('users.save_changes') }}</button>
             </div>
         </form>
     </div>

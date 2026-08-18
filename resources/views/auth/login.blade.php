@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS Login</title>
+    <title>{{ __('auth.title') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --room: #14171a;
@@ -278,6 +279,40 @@
             color: #5b6166;
             margin-top: 1.1rem;
         }
+
+        .lang-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .lang-toggle a {
+            color: #5b6166;
+            text-decoration: none;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+        }
+
+        .lang-toggle a.active {
+            color: var(--amber);
+            border-color: rgba(255, 180, 84, 0.35);
+        }
+
+        .lang-toggle a:hover {
+            color: var(--amber);
+        }
+
+        /* The pixel-terminal monospace look is Latin-only; prioritize legibility
+           over preserving it when the interface is actually in Khmer. */
+        :lang(km) * {
+            font-family: 'Kantumruy Pro', sans-serif !important;
+        }
     </style>
 </head>
 <body>
@@ -289,8 +324,8 @@
             <div class="readout">SumDrop Coffee V1<span class="cursor"></span></div>
             <div class="readout-sub">Developer  &nbsp;·&nbsp; @sen_sothi </div>
             <div class="status-row">
-                <span><span class="led"></span>info</span>
-                <span>Staff only</span>
+                <span><span class="led"></span>{{ __('auth.info') }}</span>
+                <span>{{ __('auth.staff_only') }}</span>
             </div>
         </div>
 
@@ -298,7 +333,7 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="field">
-                    <label for="email">Email</label>
+                    <label for="email">{{ __('auth.email') }}</label>
                     <div class="slot">
                         <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="you@shop.com" required autofocus>
                     </div>
@@ -306,7 +341,7 @@
                 </div>
 
                 <div class="field">
-                    <label for="password">Password</label>
+                    <label for="password">{{ __('auth.password') }}</label>
                     <div class="slot">
                         <input type="password" id="password" name="password" placeholder="••••••••" required>
                     </div>
@@ -319,13 +354,17 @@
                         <span class="track"></span>
                         <span class="knob"></span>
                     </span>
-                    <span class="label-text">Remember this device</span>
+                    <span class="label-text">{{ __('auth.remember_device') }}</span>
                 </div>
 
-                <button type="submit" class="enter-key">Enter ▸</button>
+                <button type="submit" class="enter-key">{{ __('auth.enter') }} ▸</button>
             </form>
 
-            <div class="footnote">Contact your manager if you're locked out</div>
+            <div class="footnote">{{ __('auth.locked_out') }}</div>
+            <div class="lang-toggle">
+                <a href="{{ route('language.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+                <a href="{{ route('language.switch', 'km') }}" class="{{ app()->getLocale() === 'km' ? 'active' : '' }}">ខ្មែរ</a>
+            </div>
         </div>
     </div>
 </body>

@@ -1,10 +1,10 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
-@section('title', 'Users')
-@section('page-title', 'Manage users')
-@section('page-subtitle', 'Add, edit, or remove staff accounts.')
+@section('title', __('menu.users'))
+@section('page-title', __('users.page_title'))
+@section('page-subtitle', __('users.page_subtitle'))
 @section('page-actions')
-    <a href="{{ route('users.create') }}" class="btn">+ New user</a>
+    <a href="{{ route('users.create') }}" class="btn">{{ __('users.new_user') }}</a>
 @endsection
 
 @push('styles')
@@ -26,10 +26,10 @@
             <table class="table-list" style="width:100%;">
                 <thead>
                     <tr>
-                        <th>User Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Status</th>
+                        <th>{{ __('users.user_name') }}</th>
+                        <th>{{ __('common.email') }}</th>
+                        <th>{{ __('menu.role') }}</th>
+                        <th>{{ __('common.status') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -38,17 +38,17 @@
                         <tr>
                             <td>{{ $u->name }}</td>
                             <td>{{ $u->email }}</td>
-                            <td>{{ ucfirst($u->role) }}</td>
+                            <td>{{ $u->role === 'admin' ? __('menu.role_admin') : __('menu.role_staff') }}</td>
                             <td>
-                                <span class="badge {{ $u->status ? 'badge-active' : 'badge-inactive' }}">{{ $u->status ? 'Active' : 'Inactive' }}</span>
+                                <span class="badge {{ $u->status ? 'badge-active' : 'badge-inactive' }}">{{ $u->status ? __('common.active') : __('common.inactive') }}</span>
                             </td>
                             <td>
                                 <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:flex-end;">
-                                    <a href="{{ route('users.edit', $u) }}" class="btn btn-secondary btn-sm">Edit</a>
-                                    <form action="{{ route('users.destroy', $u) }}" method="POST" onsubmit="return confirm('Delete this user?');">
+                                    <a href="{{ route('users.edit', $u) }}" class="btn btn-secondary btn-sm">{{ __('common.edit') }}</a>
+                                    <form action="{{ route('users.destroy', $u) }}" method="POST" onsubmit="return confirm('{{ __('users.confirm_delete') }}');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">{{ __('common.delete') }}</button>
                                     </form>
                                 </div>
                             </td>
@@ -58,8 +58,8 @@
             </table>
         @else
             <div class="empty-state">
-                <p>No users yet.</p>
-                <a href="{{ route('users.create') }}" class="btn">+ Add your first user</a>
+                <p>{{ __('users.no_users_yet') }}</p>
+                <a href="{{ route('users.create') }}" class="btn">{{ __('users.add_first_user') }}</a>
             </div>
         @endif
     </div>

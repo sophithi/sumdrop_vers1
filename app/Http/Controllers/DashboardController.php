@@ -26,23 +26,39 @@ class DashboardController extends Controller
         $startOfWeek = Carbon::now()->startOfWeek();
         $startOfMonth = Carbon::now()->startOfMonth();
 
+        // Orders are stored in whichever currency (khr/usd) was active at checkout, so a
+        // plain sum('total') mixes units. Normalize every order into both currencies using
+        // the same KHR rate the POS screen defaults to before summing.
+        $khrRate = 4100;
+        $salesInBothCurrencies = function ($query) use ($khrRate) {
+            $row = (clone $query)->selectRaw(
+                "COALESCE(SUM(CASE WHEN currency = 'khr' THEN total ELSE total * ? END), 0) as khr,
+                 COALESCE(SUM(CASE WHEN currency = 'usd' THEN total ELSE total / ? END), 0) as usd",
+                [$khrRate, $khrRate]
+            )->first();
+
+            return ['khr' => (float) $row->khr, 'usd' => (float) $row->usd];
+        };
+
         // Today's metrics
         $todayOrders = Order::whereDate('created_at', $today)->count();
-        $todaySales = Order::whereDate('created_at', $today)->sum('total');
+        $todaySales = $salesInBothCurrencies(Order::whereDate('created_at', $today));
+        $todaySalesKhr = $todaySales['khr'];
+        $todaySalesUsd = $todaySales['usd'];
         $todayCustomers = Order::whereDate('created_at', $today)->distinct('user_id')->count();
         $todaySold = OrderItem::whereHas('order', fn($query) => $query->whereDate('created_at', $today))->sum('quantity');
 
         // Weekly metrics
-        $weeklySales = Order::whereBetween('created_at', [$startOfWeek, now()])->sum('total');
+        $weeklySales = $salesInBothCurrencies(Order::whereBetween('created_at', [$startOfWeek, now()]))['khr'];
         $weeklyOrders = Order::whereBetween('created_at', [$startOfWeek, now()])->count();
 
         // Monthly metrics
-        $monthlySales = Order::whereBetween('created_at', [$startOfMonth, now()])->sum('total');
+        $monthlySales = $salesInBothCurrencies(Order::whereBetween('created_at', [$startOfMonth, now()]))['khr'];
         $monthlyOrders = Order::whereBetween('created_at', [$startOfMonth, now()])->count();
 
-        // Growth comparison
-        $yesterdaySales = Order::whereDate('created_at', $today->copy()->subDay())->sum('total');
-        $growthPercent = $yesterdaySales > 0 ? (($todaySales - $yesterdaySales) / $yesterdaySales * 100) : 0;
+        // Growth comparison (KHR-normalized on both sides so the percentage is meaningful)
+        $yesterdaySales = $salesInBothCurrencies(Order::whereDate('created_at', $today->copy()->subDay()))['khr'];
+        $growthPercent = $yesterdaySales > 0 ? (($todaySalesKhr - $yesterdaySales) / $yesterdaySales * 100) : 0;
 
         // Low stock alert (if products have a stock field)
         $lowStockCount = Product::where('status', true)->whereRaw('stock < 10')->count();
@@ -83,7 +99,8 @@ class DashboardController extends Controller
 
         return view('dashboard.admin', compact(
             'todayOrders',
-            'todaySales',
+            'todaySalesKhr',
+            'todaySalesUsd',
             'todayCustomers',
             'todaySold',
             'weeklySales',
@@ -103,8 +120,10 @@ class DashboardController extends Controller
 
     public function staff()
     {
-        $products = Product::where('status', true)->latest()->get();
+        $products = Product::with('category')->where('status', true)->latest()->get();
 
-        return view('dashboard.staff', compact('products'));
+        $categories = $products->pluck('category')->filter()->unique('id')->sortBy('name')->values();
+
+        return view('dashboard.staff', compact('products', 'categories'));
     }
 }

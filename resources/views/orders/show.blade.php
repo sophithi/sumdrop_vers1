@@ -1,8 +1,8 @@
 ﻿@extends('layouts.admin')
 
-@section('title', 'Receipt')
-@section('page-title', 'Receipt')
-@section('page-subtitle', 'Order #' . $order->id)
+@section('title', __('menu.receipt'))
+@section('page-title', __('menu.receipt'))
+@section('page-subtitle', __('orders.order_hash') . $order->id)
 
 @section('page-actions')
     <!-- <a href="{{ route('dashboard') }}" class="btn btn-secondary">Back to POS</a> -->
@@ -161,30 +161,38 @@
 @endpush
 
 @section('content')
+    @php
+        $paymentLabel = match($order->payment_method) {
+            'cash' => __('common.payment_cash'),
+            'bank' => __('common.payment_bank'),
+            'mobile' => __('common.payment_mobile'),
+            default => ucfirst($order->payment_method),
+        };
+    @endphp
     <div class="receipt-wrapper">
         <div class="receipt">
             <div class="receipt-store">SUMDROP COFFEE</div>
             <div class="receipt-address">123 Main Street<br>Phnom Penh, Cambodia</div>
             <div class="receipt-phone">(855) 123-4567</div>
             <div class="divider"></div>
-            <div class="receipt-order-info">Receipt #: {{ $order->receipt_number }} Barista: {{ $order->user->name ?? 'Staff' }}<br>DATE: {{ $order->created_at->format('m/d/Y') }}  TIME: {{ $order->created_at->format('h:i:s A') }}</div>
+            <div class="receipt-order-info">{{ __('orders.receipt_number_label') }} {{ $order->receipt_number }} {{ __('orders.barista_label') }} {{ $order->user->name ?? __('orders.staff_fallback') }}<br>{{ __('orders.date_label') }} {{ $order->created_at->format('m/d/Y') }}  {{ __('orders.time_label') }} {{ $order->created_at->format('h:i:s A') }}</div>
             <div class="divider"></div>
             <div class="receipt-items">
 @foreach($order->items as $item)
-<div class="receipt-item-row"><div class="receipt-item-name">{{ $item->product->name }} (x{{ $item->quantity }})</div><div class="receipt-item-price">{{ $item->getFormattedTotal() }}</div></div>
+<div class="receipt-item-row"><div class="receipt-item-name">{{ $item->product->name }}{{ $item->saleUnitLabel() ? ' (' . $item->saleUnitLabel() . ')' : '' }} (x{{ $item->quantity }})</div><div class="receipt-item-price">{{ $item->getFormattedTotal() }}</div></div>
 @endforeach
 </div>
             <div class="divider"></div>
             <div class="receipt-totals">
-<div class="receipt-total-row"><span>SUBTOTAL</span><span>{{ $order->getFormattedSubtotal() }}</span></div>
-<div class="receipt-total-row"><span>TAX</span><span>-</span></div>
-<div class="receipt-total-final"><span>TOTAL</span><span>{{ $order->getFormattedTotal() }}</span></div>
+<div class="receipt-total-row"><span>{{ __('orders.receipt_subtotal') }}</span><span>{{ $order->getFormattedSubtotal() }}</span></div>
+<div class="receipt-total-row"><span>{{ __('orders.receipt_tax') }}</span><span>-</span></div>
+<div class="receipt-total-final"><span>{{ __('orders.receipt_total') }}</span><span>{{ $order->getFormattedTotal() }}</span></div>
 </div>
             <div class="divider"></div>
-            <div class="receipt-payment">PAYMENT: {{ strtoupper($order->payment_method) }}</div>
+            <div class="receipt-payment">{{ __('orders.receipt_payment') }} {{ strtoupper($paymentLabel) }}</div>
             <div class="divider"></div>
-            <div class="receipt-thank-you">Thank you! See you tomorrow!</div>
-            <div class="receipt-actions"><button type="button" class="btn btn-secondary" onclick="window.print()">🖨️ Print</button><a href="{{ route('dashboard') }}" class="btn btn-success">✓ Done</a></div>
+            <div class="receipt-thank-you">{{ __('orders.thank_you') }}</div>
+            <div class="receipt-actions"><button type="button" class="btn btn-secondary" onclick="window.print()">🖨️ {{ __('common.print') }}</button><a href="{{ route('dashboard') }}" class="btn btn-success">✓ {{ __('common.done') }}</a></div>
         </div>
     </div>
 @endsection

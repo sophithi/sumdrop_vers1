@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'page_title' => 'Stock',
+    'page_title_full' => 'Stock Management',
+    'page_subtitle' => 'Live view of stock levels — updates automatically.',
+    'manage_products' => 'Manage products',
+    'total_products' => 'Total products',
+    'low_stock' => 'Low stock',
+    'out_of_stock' => 'Out of stock',
+    'in_stock' => 'In stock',
+    'inventory' => 'Inventory',
+    'live_prefix' => 'Live · updated',
+    'just_now' => 'just now',
+    'search_placeholder' => 'Search products…',
+    'other' => 'Other',
+    'table_adjust' => 'Adjust',
+    'add_one_case_title' => 'Add one full case',
+    'add_case_btn' => '+1 case',
+    'set_to_placeholder' => 'Set to',
+    'no_products_match_filters' => 'No products match your filters.',
+    'no_products_yet' => 'No products yet.',
+    'could_not_update_stock' => 'Could not update stock.',
+    'enter_valid_stock' => 'Enter a valid stock number.',
+];

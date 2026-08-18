@@ -6,33 +6,6 @@
 
 @push('styles')
 <style>
-    .currency-selector {
-        display: inline-flex;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        overflow: hidden;
-        background: #ffffff;
-    }
-
-    .currency-selector button {
-        border: none;
-        background: #ffffff;
-        padding: 0.5rem 0.9rem;
-        cursor: pointer;
-        color: #64748b;
-        font-weight: 600;
-        font-size: 0.85rem;
-    }
-
-    .currency-selector button.active {
-        background: #2563eb;
-        color: #ffffff;
-    }
-
-    .currency-selector button:hover:not(.active) {
-        background: #f8fafc;
-    }
-
     .overview-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -103,6 +76,13 @@
         font-size: 2rem;
         font-weight: 700;
         color: #0f172a;
+    }
+
+    .metric-value-secondary {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #94a3b8;
         margin-bottom: 0.5rem;
     }
 
@@ -322,6 +302,10 @@
         .metric-value {
             font-size: 1.65rem;
         }
+
+        .metric-value-secondary {
+            font-size: 0.95rem;
+        }
     }
 
     @media (max-width: 480px) {
@@ -346,26 +330,19 @@
 @endpush
 
 @section('content')
-    @php
-        $displayCurrency = request('currency', 'khr');
-        $currencySymbol = $displayCurrency === 'khr' ? '៛' : '$';
-        // $hour = now()->hour;
-        // $greeting = $hour < 12 ? __('dashboard.good_morning') : ($hour < 18 ? __('dashboard.good_afternoon') : __('dashboard.good_evening'));
-    @endphp
-
     <!-- Welcome Hero Section -->
     <div class="dashboard-hero">
         <div class="dashboard-hero-inner">
             <div>
-               
-                <h1>{{ auth()->user()?->name ?? 'Welcome' }}</h1>
-                <p style="margin: 0; font-size: 1.1rem; opacity: 0.95;">{{ now()->format('l, F j, Y') }}</p>
+
+                <h1>{{ auth()->user()?->name ?? __('dashboard.welcome') }}</h1>
+                <p style="margin: 0; font-size: 1.1rem; opacity: 0.95;">{{ now()->locale(app()->getLocale())->translatedFormat('l, F j, Y') }}</p>
             </div>
             <div class="dashboard-hero-status">
-                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; opacity: 0.9;">System Status</p>
+                <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; opacity: 0.9;">{{ __('dashboard.system_status') }}</p>
                 <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 8px;">
                     <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
-                    <span style="font-weight: 600;">Operational</span>
+                    <span style="font-weight: 600;">{{ __('dashboard.operational') }}</span>
                 </div>
             </div>
         </div>
@@ -374,44 +351,31 @@
     <!-- Quick Actions Section -->
     <div class="quick-actions-grid">
         <a href="{{ route('products.index') }}" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 1.5rem; text-decoration: none; color: #0369a1; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(3, 105, 161, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Manage Menu</div>
-            <div style="font-size: 0.9rem; opacity: 0.7;">View & edit products</div>
+            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">{{ __('dashboard.quick_manage_menu') }}</div>
+            <div style="font-size: 0.9rem; opacity: 0.7;">{{ __('dashboard.quick_manage_menu_desc') }}</div>
         </a>
         <a href="{{ route('orders.index') }}" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); border: 1px solid #86efac; border-radius: 12px; padding: 1.5rem; text-decoration: none; color: #166534; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(22, 101, 52, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">View Orders</div>
-            <div style="font-size: 0.9rem; opacity: 0.7;">Check order status</div>
+            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">{{ __('dashboard.quick_view_orders') }}</div>
+            <div style="font-size: 0.9rem; opacity: 0.7;">{{ __('dashboard.quick_view_orders_desc') }}</div>
         </a>
         <a href="{{ route('receipts.index') }}" style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); border: 1px solid #fcd34d; border-radius: 12px; padding: 1.5rem; text-decoration: none; color: #92400e; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(146, 64, 14, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Recent Receipts</div>
-            <div style="font-size: 0.9rem; opacity: 0.7;">Print receipts</div>
+            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">{{ __('dashboard.quick_recent_receipts') }}</div>
+            <div style="font-size: 0.9rem; opacity: 0.7;">{{ __('dashboard.quick_recent_receipts_desc') }}</div>
         </a>
         <a href="{{ route('reports.index') }}" style="background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 100%); border: 1px solid #c7d2fe; border-radius: 12px; padding: 1.5rem; text-decoration: none; color: #4f46e5; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(79, 70, 229, 0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">View Reports</div>
-            <div style="font-size: 0.9rem; opacity: 0.7;">Analytics & insights</div>
+            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">{{ __('dashboard.quick_view_reports') }}</div>
+            <div style="font-size: 0.9rem; opacity: 0.7;">{{ __('dashboard.quick_view_reports_desc') }}</div>
         </a>
     </div>
 
-    <!-- Currency Selector -->
-    <!-- <div class="dashboard-section-header">
-        <h2>Today's Performance</h2>
-        <div class="currency-selector">
-            <button type="button" id="curr-khr" class="active" onclick="window.location.href='{{ route('dashboard') }}?currency=khr'">៛ KHR (Base)</button>
-            <button type="button" id="curr-usd" onclick="window.location.href='{{ route('dashboard') }}?currency=usd'">$ USD</button>
-        </div>
-    </div> -->
 
     <!-- Key Metrics -->
     <div class="overview-grid">
         <div class="metric-card primary">
             <div class="metric-card-content">
                 <span class="metric-label">{{ __('dashboard.today_sales') }}</span>
-                <span class="metric-value">
-                    @if($displayCurrency === 'khr')
-                        ៛{{ number_format($todaySales ?? 0, 0) }}
-                    @else
-                        ${{ number_format($todaySales ?? 0, 2) }}
-                    @endif
-                </span>
+                <span class="metric-value">៛{{ number_format($todaySalesKhr ?? 0, 0) }}</span>
+                <span class="metric-value-secondary">${{ number_format($todaySalesUsd ?? 0, 2) }}</span>
                 <span class="metric-desc">{{ __('dashboard.revenue_since_midnight') }}</span>
                 @if($yesterdaySales > 0)
                     <div class="metric-growth {{ $growthPercent >= 0 ? 'positive' : 'negative' }}">
@@ -420,72 +384,6 @@
                 @endif
             </div>
         </div>
-
-        <div class="metric-card success">
-            <div class="metric-card-content">
-                <span class="metric-label">{{ __('dashboard.orders_completed') }}</span>
-                <span class="metric-value">{{ $todayOrders ?? 0 }}</span>
-                <span class="metric-desc">{{ __('dashboard.transactions_processed') }}</span>
-            </div>
-        </div>
-
-        <div class="metric-card warning">
-            <div class="metric-card-content">
-                <span class="metric-label">{{ __('dashboard.customers') }}</span>
-                <span class="metric-value">{{ $todayCustomers ?? 0 }}</span>
-                <span class="metric-desc">{{ __('dashboard.unique_customers') }}</span>
-            </div>
-        </div>
-
-        <div class="metric-card info">
-            <div class="metric-card-content">
-                <span class="metric-label">{{ __('dashboard.items_sold') }}</span>
-                <span class="metric-value">{{ $todaySold ?? 0 }}</span>
-                <span class="metric-desc">{{ __('dashboard.product_quantity_sold') }}</span>
-            </div>
-        </div>
     </div>
-
-    <!-- Additional Period Metrics -->
-    <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem;">Weekly & Monthly Overview</h2>
-    <div class="overview-grid" style="margin-bottom: 2rem;">
-        <div class="metric-card" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-color: #cffafe;">
-            <div class="metric-card-content">
-                <span class="metric-label">{{ __('dashboard.weekly_sales') }}</span>
-                <span class="metric-value" style="color: #0369a1;">
-                    @if($displayCurrency === 'khr')
-                        ៛{{ number_format($weeklySales ?? 0, 0) }}
-                    @else
-                        ${{ number_format($weeklySales ?? 0, 2) }}
-                    @endif
-                </span>
-                <span class="metric-desc">{{ $weeklyOrders ?? 0 }} {{ __('dashboard.orders_this_week') }}</span>
-            </div>
-        </div>
-
-        <div class="metric-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); border-color: #fbbf24;">
-            <div class="metric-card-content">
-                <span class="metric-label">{{ __('dashboard.monthly_sales') }}</span>
-                <span class="metric-value" style="color: #92400e;">
-                    @if($displayCurrency === 'khr')
-                        ៛{{ number_format($monthlySales ?? 0, 0) }}
-                    @else
-                        ${{ number_format($monthlySales ?? 0, 2) }}
-                    @endif
-                </span>
-                <span class="metric-desc">{{ $monthlyOrders ?? 0 }} {{ __('dashboard.orders_this_month') }}</span>
-            </div>
-        </div>
-
-        <div class="metric-card" style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-color: #ddd6fe;">
-            <div class="metric-card-content">
-                <span class="metric-label">{{ __('dashboard.low_stock_items') }}</span>
-                <span class="metric-value" style="color: #7c3aed;">{{ $lowStockCount ?? 0 }}</span>
-                <span class="metric-desc">{{ __('dashboard.items_need_attention') }}</span>
-            </div>
-        </div>
-    </div>
-
-
 
 @endsection

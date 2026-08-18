@@ -7,6 +7,7 @@ return [
     'pos' => 'POS',
     'orders' => 'Pedidos',
     'menu' => 'Menú',
+    'stock' => 'Stock',
     'purchases' => 'Compras',
     'receipt' => 'Recibo',
     'categories' => 'Categorías',

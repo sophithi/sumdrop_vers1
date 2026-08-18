@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Receipts')
-@section('page-title', 'Order Receipts')
-@section('page-subtitle', 'View and print order receipts')
+@section('title', __('receipts.title'))
+@section('page-title', __('receipts.page_title'))
+@section('page-subtitle', __('receipts.subtitle'))
 
 @push('styles')
 <style>
@@ -177,13 +177,13 @@
 @section('content')
     <!-- Date Filter Section -->
     <div class="receipt-filter-section">
-        <h3>Filter by Date</h3>
+        <h3>{{ __('receipts.filter_by_date') }}</h3>
         <form method="GET" action="{{ route('receipts.index') }}" class="filter-form">
             <!-- Day Filter -->
             <div>
-                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #475569;">Day</label>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #475569;">{{ __('receipts.day') }}</label>
                 <select name="day" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
-                    <option value="">All Days</option>
+                    <option value="">{{ __('receipts.all_days') }}</option>
                     @foreach($days as $day)
                         <option value="{{ $day }}" {{ request('day') == $day ? 'selected' : '' }}>
                             {{ str_pad($day, 2, '0', STR_PAD_LEFT) }}
@@ -191,12 +191,12 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <!-- Month Filter -->
             <div>
-                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #475569;">Month</label>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #475569;">{{ __('receipts.month') }}</label>
                 <select name="month" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
-                    <option value="">All Months</option>
+                    <option value="">{{ __('receipts.all_months') }}</option>
                     @foreach($months as $month)
                         <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
                             {{ \Carbon\Carbon::createFromFormat('m', $month)->format('F') }}
@@ -204,12 +204,12 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <!-- Year Filter -->
             <div>
-                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #475569;">Year</label>
+                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: #475569;">{{ __('receipts.year') }}</label>
                 <select name="year" style="width: 100%; padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
-                    <option value="">All Years</option>
+                    <option value="">{{ __('receipts.all_years') }}</option>
                     @foreach($years as $year)
                         <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
                             {{ $year }}
@@ -217,46 +217,46 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <!-- Filter Button -->
             <div class="filter-actions">
-                <button type="submit" style="padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Filter</button>
-                <a href="{{ route('receipts.index') }}" style="padding: 0.6rem 1rem; background: #e2e8f0; color: #0f172a; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center;">Reset</a>
+                <button type="submit" style="padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">{{ __('common.filter') }}</button>
+                <a href="{{ route('receipts.index') }}" style="padding: 0.6rem 1rem; background: #e2e8f0; color: #0f172a; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center;">{{ __('receipts.reset') }}</a>
             </div>
-            
+
             <!-- Download PDF Button -->
             <div class="filter-actions filter-actions-end">
-                <button type="button" onclick="downloadReceiptsPDF()" style="padding: 0.6rem 1.2rem; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; width: 100%;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">Download PDF</button>
+                <button type="button" onclick="downloadReceiptsPDF()" style="padding: 0.6rem 1.2rem; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s ease; width: 100%;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">{{ __('receipts.download_pdf') }}</button>
             </div>
         </form>
     </div>
-    
+
     <!-- Results Count -->
     @if(request()->filled('day') || request()->filled('month') || request()->filled('year'))
         <div style="background: #eff6ff; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #2563eb; color: #0c4a6e; font-weight: 500;">
-            Showing {{ $receipts->count() }} receipt(s)
+            {{ __('receipts.showing_count', ['count' => $receipts->count()]) }}
         </div>
     @endif
 
     @if($receipts->isEmpty())
         <div class="panel" style="text-align: center; padding: 3rem;">
             <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
-            <h3>No receipts available</h3>
-            <p style="color: #64748b;">Orders will appear here once they are completed.</p>
+            <h3>{{ __('receipts.no_receipts_heading') }}</h3>
+            <p style="color: #64748b;">{{ __('receipts.no_receipts_text') }}</p>
         </div>
     @else
         <div class="table-responsive">
         <table class="receipts-table">
             <thead>
                 <tr>
-                    <th style="width: 8%;">Receipt #</th>
-                    <th style="width: 12%;">Date</th>
-                    <th style="width: 15%;">Customer</th>
-                    <th style="width: 18%;">Items</th>
-                    <th style="width: 10%;">Currency</th>
-                    <th style="width: 12%;">Total</th>
-                    <th style="width: 10%;">Payment</th>
-                    <th style="width: 10%;">Status</th>
+                    <th style="width: 8%;">{{ __('receipts.receipt_hash') }}</th>
+                    <th style="width: 12%;">{{ __('common.date') }}</th>
+                    <th style="width: 15%;">{{ __('common.customer') }}</th>
+                    <th style="width: 18%;">{{ __('receipts.items') }}</th>
+                    <th style="width: 10%;">{{ __('common.currency') }}</th>
+                    <th style="width: 12%;">{{ __('common.total') }}</th>
+                    <th style="width: 10%;">{{ __('common.payment') }}</th>
+                    <th style="width: 10%;">{{ __('common.status') }}</th>
                     <th style="width: 7%;"></th>
                 </tr>
             </thead>
@@ -265,10 +265,10 @@
                     <tr>
                         <td class="receipt-id">#{{ str_pad($receipt->id, 3, '0', STR_PAD_LEFT) }}</td>
                         <td class="receipt-date">{{ $receipt->created_at->format('M d, Y') }}</td>
-                        <td class="receipt-customer">{{ $receipt->user?->name ?? 'Guest' }}</td>
+                        <td class="receipt-customer">{{ $receipt->user?->name ?? __('receipts.guest') }}</td>
                         <td class="receipt-items-list">
                             @foreach($receipt->items as $item)
-                                <div>{{ $item->product?->name ?? 'Unknown' }} ({{ $item->quantity }})</div>
+                                <div>{{ $item->product?->name ?? __('receipts.unknown_product') }}{{ $item->saleUnitLabel() ? ' — ' . $item->saleUnitLabel() : '' }} ({{ $item->quantity }})</div>
                             @endforeach
                         </td>
                         <td><span class="receipt-currency-badge">{{ strtoupper($receipt->currency) }}</span></td>
@@ -282,17 +282,29 @@
                         <td>
                             <span class="receipt-payment-badge">
                                 @if($receipt->payment_method === 'cash')
-                                    Cash
+                                    {{ __('common.payment_cash') }}
                                 @elseif($receipt->payment_method === 'bank')
-                                    Bank
+                                    {{ __('common.payment_bank') }}
                                 @else
-                                    Mobile
+                                    {{ __('common.payment_mobile') }}
                                 @endif
                             </span>
                         </td>
-                        <td><span class="receipt-status-badge {{ strtolower($receipt->status) }}">{{ ucfirst($receipt->status) }}</span></td>
+                        <td><span class="receipt-status-badge {{ strtolower($receipt->status) }}">
+                                @if(strtolower($receipt->status) === 'completed')
+                                    {{ __('common.status_completed') }}
+                                @elseif(strtolower($receipt->status) === 'pending')
+                                    {{ __('common.status_pending') }}
+                                @elseif(strtolower($receipt->status) === 'cancelled')
+                                    {{ __('common.status_cancelled') }}
+                                @elseif(strtolower($receipt->status) === 'processing')
+                                    {{ __('common.status_processing') }}
+                                @else
+                                    {{ ucfirst($receipt->status) }}
+                                @endif
+                            </span></td>
                         <td style="text-align: center;">
-                            <a href="{{ route('orders.show', $receipt->id) }}" class="print-receipt-btn" style="display: inline-block; padding: 0.5rem 1rem; background: #2563eb; color: white; border-radius: 6px; text-decoration: none; cursor: pointer; border: none; font-weight: 500;">Print</a>
+                            <a href="{{ route('orders.show', $receipt->id) }}" class="print-receipt-btn" style="display: inline-block; padding: 0.5rem 1rem; background: #2563eb; color: white; border-radius: 6px; text-decoration: none; cursor: pointer; border: none; font-weight: 500;">{{ __('common.print') }}</a>
                         </td>
                     </tr>
                 @endforeach
@@ -306,9 +318,9 @@
     <script>
         function downloadReceiptsPDF() {
             const element = document.querySelector('.receipts-table');
-            
+
             if (!element) {
-                alert('No receipts to download');
+                alert('{{ __('receipts.no_receipts_to_download') }}');
                 return;
             }
 

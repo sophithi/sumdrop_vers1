@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'SumDrop POS')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #f1f5f9;
@@ -30,9 +32,13 @@
 
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Kantumruy Pro', sans-serif;
             background: var(--bg);
             color: var(--text);
+        }
+
+        :lang(km) {
+            line-height: 1.65;
         }
 
         a {
@@ -178,8 +184,36 @@
             box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.3);
         }
 
-        .sidebar-footer {
+        .sidebar-lang-toggle {
+            display: flex;
+            gap: 0.4rem;
             margin-top: auto;
+        }
+
+        .sidebar-lang-toggle a {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #94a3b8;
+            background: rgba(148, 163, 184, 0.08);
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .sidebar-lang-toggle a:hover {
+            background: rgba(96, 165, 250, 0.15);
+            color: #cbd5e1;
+        }
+
+        .sidebar-lang-toggle a.active {
+            background: rgba(59, 130, 246, 0.28);
+            color: #ffffff;
+        }
+
+        .sidebar-footer {
             padding: 1.2rem 1.5rem;
             margin: 1rem -1.5rem -2rem -1.5rem;
             border-top: 1px solid rgba(96, 165, 250, 0.2);
@@ -420,6 +454,21 @@
             font-size: 0.82rem;
         }
 
+        .badge-size {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        .badge-unit {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        .badge-low-stock {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
         .status-cash {
             background: #dcfce7;
             color: #166534;
@@ -641,10 +690,6 @@
                 flex: 1 1 auto;
             }
 
-            .page-actions #language-select {
-                width: 100%;
-            }
-
             .filter-form .filter-actions-end {
                 justify-self: stretch;
             }
@@ -676,8 +721,7 @@
             }
 
             .page-actions .btn,
-            .page-actions form,
-            .page-actions #language-select {
+            .page-actions form {
                 width: 100%;
             }
         }
@@ -708,10 +752,15 @@
                     </li>
                     <!-- Operations Section -->
                     <li class="nav-section">
-                        <p class="nav-section-title">Operations</p>
+                        <p class="nav-section-title">{{ __('menu.operations') }}</p>
                         <li class="nav-item">
                             <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">
                                 <span>{{ __('menu.menu') }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('stock.index') }}" class="{{ request()->routeIs('stock.*') ? 'active' : '' }}">
+                                <span>{{ __('menu.stock') }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -733,7 +782,7 @@
                     <!-- Management Section (Admin Only) -->
                     @if($isAdmin)
                         <li class="nav-section">
-                            <p class="nav-section-title">Management</p>
+                            <p class="nav-section-title">{{ __('menu.management') }}</p>
                             <li class="nav-item">
                                 <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">
                                     <span>{{ __('menu.reports') }}</span>
@@ -748,10 +797,14 @@
                     @endif
                 </ul>
             </nav>
+            <div class="sidebar-lang-toggle">
+                <a href="{{ route('language.switch', 'en') }}" class="{{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+                <a href="{{ route('language.switch', 'km') }}" class="{{ app()->getLocale() === 'km' ? 'active' : '' }}">ខ្មែរ</a>
+            </div>
             <div class="sidebar-footer">
                 <div class="sidebar-footer-info">
-                    <strong>{{ auth()->user()?->name ?? 'User' }}</strong>
-                    <span>{{ auth()->user()?->role ? ucfirst(auth()->user()->role) : 'Staff' }}</span>
+                    <strong>{{ auth()->user()?->name ?? __('menu.user_fallback') }}</strong>
+                    <span>{{ auth()->user()?->role === 'admin' ? __('menu.role_admin') : __('menu.role_staff') }}</span>
                 </div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -765,7 +818,7 @@
         <main class="main">
             <div class="topbar">
                 <div class="topbar-left">
-                    <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+                    <button type="button" class="menu-toggle" id="menuToggle" aria-label="{{ __('menu.open_menu') }}">☰</button>
                     <div>
                         <h2>@yield('page-title', 'Dashboard')</h2>
                         @hasSection('page-subtitle')
@@ -804,13 +857,6 @@
                     overlay.classList.remove("active");
                 }
             });
-        });
-
-        /* Language */
-        document.getElementById('language-select').addEventListener('change', function (e) {
-            const lang = e.target.value;
-            const baseUrl = "{{ route('language.switch', ['locale' => '__LOCALE__']) }}".replace('__LOCALE__', lang);
-            window.location.href = baseUrl;
         });
     </script>
 

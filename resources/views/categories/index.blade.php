@@ -1,10 +1,10 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
-@section('title', 'Categories')
-@section('page-title', 'Categories')
-@section('page-subtitle', 'Manage categories and visibility.')
+@section('title', __('menu.categories'))
+@section('page-title', __('menu.categories'))
+@section('page-subtitle', __('categories.page_subtitle'))
 @section('page-actions')
-    <a href="{{ route('categories.create') }}" class="btn">+ Add Category</a>
+    <a href="{{ route('categories.create') }}" class="btn">{{ __('categories.add_category') }}</a>
 @endsection
 
 @section('content')
@@ -17,10 +17,10 @@
         <table class="table-list" style="width:100%;">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Slug</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{{ __('common.name') }}</th>
+                    <th>{{ __('categories.slug') }}</th>
+                    <th>{{ __('common.status') }}</th>
+                    <th>{{ __('common.actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,14 +28,14 @@
                     <tr>
                         <td>{{ $category->name }}</td>
                         <td>{{ $category->slug }}</td>
-                        <td>{{ $category->status ? 'Active' : 'Inactive' }}</td>
+                        <td>{{ $category->status ? __('common.active') : __('common.inactive') }}</td>
                         <td>
                             <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-secondary btn-sm">Edit</a>
+                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-secondary btn-sm">{{ __('common.edit') }}</a>
                                 <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this category?')">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('{{ __('categories.confirm_delete') }}')">{{ __('common.delete') }}</button>
                                 </form>
                             </div>
                         </td>

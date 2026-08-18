@@ -1,10 +1,10 @@
 ﻿@extends('layouts.admin')
 
-@section('title', 'Products')
-@section('page-title', 'Products')
-@section('page-subtitle', 'Manage menu items, pricing and stock.')
+@section('title', __('menu.menu'))
+@section('page-title', __('menu.menu'))
+@section('page-subtitle', __('products.index_subtitle'))
 @section('page-actions')
-    <a href="{{ route('products.create') }}" class="btn">+ New product</a>
+    <a href="{{ route('products.create') }}" class="btn">+ {{ __('products.new_product') }}</a>
 @endsection
 
 @push('styles')
@@ -27,11 +27,12 @@
             <table class="table-list" style="width:100%;">
                 <thead>
                     <tr>
-                        <th>Product</th>
-                        <th>Category</th>
-                        <th>Price (KHR)</th>
-                        <th>Price (USD)</th>
-                        <th>Status</th>
+                        <th>{{ __('common.product') }}</th>
+                        <th>{{ __('common.category') }}</th>
+                        <th>{{ __('common.price') }} (KHR)</th>
+                        <th>{{ __('common.price') }} (USD)</th>
+                        <th>{{ __('common.stock') }}</th>
+                        <th>{{ __('common.status') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -47,26 +48,47 @@
                                     @endif
                                     <div>
                                         <strong>{{ $product->name }}</strong>
-                                        <small>{{ $product->sku }}</small>
+                                        @if($product->size)
+                                            <span class="badge badge-size">{{ $product->size }}</span>
+                                        @endif
+                                        @if($product->isCase())
+                                            <span class="badge badge-unit">{{ $product->getUnitLabel() }}</span>
+                                        @endif
+                                        <br><small>{{ $product->sku }}</small>
                                     </div>
                                 </div>
                             </td>
                             <td>{{ $product->category->name ?? '—' }}</td>
-                            <td>{{ $product->getFormattedPriceKhr() }}</td>
-                            <td>{{ $product->getFormattedPriceUsd() }}</td>
+                            <td>
+                                {{ $product->getFormattedPriceKhr() }}
+                                @if($product->sellsByPiece())
+                                    <br><small style="color:#64748b;">{{ __('products.piece_price_prefix') }} ៛{{ number_format($product->price_khr_piece) }}</small>
+                                @endif
+                            </td>
+                            <td>
+                                {{ $product->getFormattedPriceUsd() }}
+                                @if($product->sellsByPiece())
+                                    <br><small style="color:#64748b;">{{ __('products.piece_price_prefix') }} ${{ number_format($product->price_usd_piece, 2) }}</small>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="badge {{ $product->isLowStock() ? 'badge-low-stock' : 'badge-active' }}">
+                                    {{ $product->stockDisplay() }}
+                                </span>
+                            </td>
                             <td>
                                 <span class="badge {{ $product->status ? 'badge-active' : 'badge-inactive' }}">
-                                    {{ $product->status ? 'Active' : 'Inactive' }}
+                                    {{ $product->status ? __('common.active') : __('common.inactive') }}
                                 </span>
                             </td>
                             <td>
                                 <div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:flex-end;">
-                                    <a href="{{ route('products.show', $product) }}" class="btn btn-secondary btn-sm">View</a>
-                                    <a href="{{ route('products.edit', $product) }}" class="btn btn-secondary btn-sm">Edit</a>
-                                    <form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirm('Delete this product?');">
+                                    <a href="{{ route('products.show', $product) }}" class="btn btn-secondary btn-sm">{{ __('common.view') }}</a>
+                                    <a href="{{ route('products.edit', $product) }}" class="btn btn-secondary btn-sm">{{ __('common.edit') }}</a>
+                                    <form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirm('{{ __('common.confirm_delete') }}');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">{{ __('common.delete') }}</button>
                                     </form>
                                 </div>
                             </td>
@@ -77,8 +99,8 @@
             </div>
         @else
             <div class="empty-state">
-                <p>No products yet.</p>
-                <a href="{{ route('products.create') }}" class="btn">+ Add your first product</a>
+                <p>{{ __('common.no_products_yet') }}</p>
+                <a href="{{ route('products.create') }}" class="btn">+ {{ __('products.add_first_product') }}</a>
             </div>
         @endif
     </div>

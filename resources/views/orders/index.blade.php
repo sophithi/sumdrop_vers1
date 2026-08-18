@@ -1,8 +1,8 @@
 ﻿@extends('layouts.admin')
 
-@section('title', 'Orders')
-@section('page-title', 'Orders')
-@section('page-subtitle', 'Review recent and completed sales.')
+@section('title', __('menu.orders'))
+@section('page-title', __('menu.orders'))
+@section('page-subtitle', __('orders.subtitle'))
 
 @section('page-actions')
     <!-- <a href="{{ route('dashboard') }}" class="btn btn-secondary">Back to POS</a> -->
@@ -150,39 +150,51 @@
                 <thead>
                     <tr>
                         <th style="width: 6%;">#</th>
-                        <th style="width: 14%;">Staff</th>
-                        <th style="width: 12%;">Payment</th>
-                        <th style="width: 8%;">Currency</th>
-                        <th style="width: 12%;">Subtotal</th>
-                        <th style="width: 12%;">Total</th>
-                        <th style="width: 12%;">Status</th>
-                        <th style="width: 12%;">Date</th>
-                        <th style="width: 12%;">Actions</th>
+                        <th style="width: 14%;">{{ __('orders.staff') }}</th>
+                        <th style="width: 12%;">{{ __('common.payment') }}</th>
+                        <th style="width: 8%;">{{ __('common.currency') }}</th>
+                        <th style="width: 12%;">{{ __('common.subtotal') }}</th>
+                        <th style="width: 12%;">{{ __('common.total') }}</th>
+                        <th style="width: 12%;">{{ __('common.status') }}</th>
+                        <th style="width: 12%;">{{ __('common.date') }}</th>
+                        <th style="width: 12%;">{{ __('common.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($orders as $order)
                         <tr>
                             <td class="order-id"><a href="{{ route('orders.show', $order) }}" style="color: inherit; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;">#{{ str_pad($order->id, 3, '0', STR_PAD_LEFT) }}</a></td>
-                            <td class="order-staff">{{ $order->user->name ?? 'N/A' }}</td>
+                            <td class="order-staff">{{ $order->user->name ?? __('orders.na') }}</td>
                             <td><span class="order-payment">
                                 @if($order->payment_method === 'cash')
-                                    Cash
+                                    {{ __('common.payment_cash') }}
                                 @elseif($order->payment_method === 'mobile')
-                                    Mobile
+                                    {{ __('common.payment_mobile') }}
                                 @else
-                                    Bank
+                                    {{ __('common.payment_bank') }}
                                 @endif
                             </span></td>
                             <td><span class="order-currency">{{ strtoupper($order->currency) }}</span></td>
                             <td style="color: #64748b; font-size: 0.95rem;">{{ $order->getFormattedSubtotal() }}</td>
                             <td class="order-total">{{ $order->getFormattedTotal() }}</td>
-                            <td><span class="order-status {{ strtolower($order->status) }}">{{ ucfirst($order->status) }}</span></td>
+                            <td><span class="order-status {{ strtolower($order->status) }}">
+                                @if(strtolower($order->status) === 'completed')
+                                    {{ __('common.status_completed') }}
+                                @elseif(strtolower($order->status) === 'pending')
+                                    {{ __('common.status_pending') }}
+                                @elseif(strtolower($order->status) === 'cancelled')
+                                    {{ __('common.status_cancelled') }}
+                                @elseif(strtolower($order->status) === 'processing')
+                                    {{ __('common.status_processing') }}
+                                @else
+                                    {{ ucfirst($order->status) }}
+                                @endif
+                            </span></td>
                             <td style="color: #64748b; font-size: 0.95rem;">{{ $order->created_at->format('Y-m-d') }}</td>
                             <td style="text-align: center;">
                                 <div style="display: inline-flex; gap: 0.5rem;">
-                                    <a href="{{ route('orders.show', $order) }}" style="padding: 0.4rem 0.7rem; background: #2563eb; color: white; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 500;" title="View">View</a>
-                                    <button onclick="if(confirm('Are you sure you want to delete this order?')) { document.getElementById('delete-form-{{ $order->id }}').submit(); }" style="padding: 0.4rem 0.7rem; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;" title="Delete">Delete</button>
+                                    <a href="{{ route('orders.show', $order) }}" style="padding: 0.4rem 0.7rem; background: #2563eb; color: white; border-radius: 4px; text-decoration: none; font-size: 0.85rem; font-weight: 500;" title="{{ __('common.view') }}">{{ __('common.view') }}</a>
+                                    <button onclick="if(confirm('{{ __('orders.confirm_delete') }}')) { document.getElementById('delete-form-{{ $order->id }}').submit(); }" style="padding: 0.4rem 0.7rem; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 500;" title="{{ __('common.delete') }}">{{ __('common.delete') }}</button>
                                     <form id="delete-form-{{ $order->id }}" action="{{ route('orders.destroy', $order) }}" method="POST" style="display: none;">
                                         @csrf
                                         @method('DELETE')
@@ -195,7 +207,7 @@
             </table>
         @else
             <div class="orders-empty">
-                <p class="text-muted">No orders have been recorded yet.</p>
+                <p class="text-muted">{{ __('orders.no_orders_yet') }}</p>
                 <!-- <a href="{{ route('dashboard') }}" class="btn">Back to POS</a> -->
             </div>
         @endif

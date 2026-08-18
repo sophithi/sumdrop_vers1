@@ -1,19 +1,14 @@
 <?php
 
 return [
-    'title' => 'ក្ដារគ្រប់គ្រាន់',
-    'overview' => 'ទិដ្ឋភាពក្ដារគ្រប់គ្រាន់',
+    'title' => 'ទិន្នន័យ',
+    'overview' => 'ផ្ទាំងទិន្នន័យទូទៅ',
     'live_metrics' => 'ការលក់ផ្ទាល់ការទូទាត់ការជូនដំណឹងឡើងវិញលើស្តុកនិងការបញ្ជាទិញក្រោយៗ។',
-    
-    // Greetings
-    'good_morning' => 'ស្វាគមន៍ព្រឹក',
-    'good_afternoon' => 'ស្វាគមន៍ល្ងាច',
-    'good_evening' => 'ស្វាគមន៍ពេលល្ងាច',
-    
+        
     // Metrics
     'today_sales' => 'ការលក់ថ្ងៃនេះ',
-    'revenue_since_midnight' => 'ប្រាក់ចូលរក្សាទុកចាប់ពីពេលអស់រាត្រី។',
-    'orders_completed' => 'បញ្ជាឱ្យត្រូវបានបញ្ច្រាស់',
+    'revenue_since_midnight' => 'ប្រាក់ចូលរក្សាទុក',
+    'orders_completed' => 'ការបញ្ជាទិញ',
     'transactions_processed' => 'ការផ្លាស់ប្តូរដែលកំពុងដំណើរការថ្ងៃនេះ។',
     'customers' => 'អតិថិជន',
     'unique_customers' => 'អតិថិជនមិនដូចគ្នាថ្ងៃនេះ។',
@@ -23,7 +18,7 @@ return [
     'items_need_attention' => 'វត្ថុដែលត្រូវការការយកចិត្តទុកដាក់។',
     
     // Sections
-    'payment_breakdown' => 'ការសម្ភាសន៍ការទូទាត់',
+    'payment_breakdown' => 'ការទូទាត់',
     'top_selling_items' => 'របស់លក់ដែលល្អបំផុត',
     'recent_orders' => 'បញ្ជាទិញក្រោយៗ',
     'weekly_sales' => 'ការលក់ប្រចាំសប្តាហ៍',
@@ -65,5 +60,19 @@ return [
     'vs_yesterday' => 'ធៀបនឹងថ្ងៃម្សិលមិញ',
     'have_low_stock' => 'មានភាពយឺតក្នុងស្តុក។ សូមពិនិត្យ និងបញ្ជាទិញឡើងវិញ។',
     'no_customers_yet' => 'គ្មានអតិថិជននៅឡើយ។',
-    'no_items_sold_yet' => 'មិនមានរឿងលក់នៅឡើយ។',
+    'no_items_sold_yet' => 'មិនមានការលក់នៅឡើយ។',
+
+    // Hero / quick actions
+    'welcome' => 'សូមស្វាគមន៍',
+    'system_status' => 'ស្ថានភាពប្រព័ន្ធ',
+    'operational' => 'ដំណើរការធម្មតា',
+    'weekly_monthly_overview' => 'ទិដ្ឋភាពទូទៅប្រចាំសប្តាហ៍ និងប្រចាំខែ',
+    'quick_manage_menu' => 'គ្រប់គ្រងម៉ឺនុយ',
+    'quick_manage_menu_desc' => 'មើល និងកែសម្រួលផលិតផល',
+    'quick_view_orders' => 'មើលបញ្ជាទិញ',
+    'quick_view_orders_desc' => 'ពិនិត្យស្ថានភាពបញ្ជាទិញ',
+    'quick_recent_receipts' => 'វិក្ក័យបត្រថ្មីៗ',
+    'quick_recent_receipts_desc' => 'បោះពុម្ពវិក្ក័យបត្រ',
+    'quick_view_reports' => 'មើលរបាយការណ៍',
+    'quick_view_reports_desc' => 'ការវិភាគ និងទិន្នន័យ',
 ];

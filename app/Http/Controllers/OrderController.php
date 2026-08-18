@@ -31,6 +31,7 @@ class OrderController extends Controller
             'items' => ['required', 'array'],
             'items.*.product_id' => ['required', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
+            'items.*.unit' => ['nullable', 'in:piece,case'],
             'payment_method' => ['required', 'in:cash,bank,mobile'],
         ]);
 
@@ -40,7 +41,8 @@ class OrderController extends Controller
 
         foreach ($request->items as $item) {
             $product = Product::findOrFail($item['product_id']);
-            $price = $product->getPriceByCurrency($currency);
+            $saleUnit = $this->resolveSaleUnit($product, $item['unit'] ?? null);
+            $price = $product->getPriceForUnit($currency, $saleUnit);
             $subtotal += $price * $item['quantity'];
         }
 
@@ -63,17 +65,40 @@ class OrderController extends Controller
 
             foreach ($request->items as $item) {
                 $product = Product::findOrFail($item['product_id']);
+                $saleUnit = $this->resolveSaleUnit($product, $item['unit'] ?? null);
 
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $product->id,
                     'quantity' => $item['quantity'],
-                    'price' => $product->getPriceByCurrency($currency),
+                    'sale_unit' => $saleUnit,
+                    'price' => $product->getPriceForUnit($currency, $saleUnit),
                 ]);
+
+                $baseUnitsSold = $item['quantity'] * $product->unitsPerSale($saleUnit);
+                $product->update(['stock' => max(0, $product->stock - $baseUnitsSold)]);
             }
 
-            return redirect()->route('orders.show', $order)->with('success', 'Order completed successfully.');
+            return redirect()->route('orders.show', $order)->with('success', __('common.order_completed'));
         });
+    }
+
+    /**
+     * Resolve the requested sale unit against what the product actually supports,
+     * rather than trusting the client. A non-case product only ever sells as a
+     * piece; a case product only sells by the piece if it has a piece price set.
+     */
+    protected function resolveSaleUnit(Product $product, ?string $requestedUnit): string
+    {
+        if (! $product->isCase()) {
+            return 'piece';
+        }
+
+        if ($requestedUnit === 'piece' && $product->sellsByPiece()) {
+            return 'piece';
+        }
+
+        return 'case';
     }
 
     public function show(Order $order)
@@ -127,6 +152,6 @@ class OrderController extends Controller
         $order->items()->delete();
         $order->delete();
 
-        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+        return redirect()->route('orders.index')->with('success', __('common.order_deleted'));
     }
 }

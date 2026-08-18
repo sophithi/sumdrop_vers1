@@ -15,6 +15,7 @@ class OrderItem extends Model
         'order_id',
         'product_id',
         'quantity',
+        'sale_unit',
         'price',
     ];
 
@@ -53,5 +54,19 @@ class OrderItem extends Model
     public function getLineTotal(): float
     {
         return $this->price * $this->quantity;
+    }
+
+    /**
+     * Short label for how this line was sold, e.g. "Case" or "Piece" — only
+     * meaningful (and shown) for a case product that was sold by the piece or
+     * whole; blank for ordinary single-unit products and pre-feature rows.
+     */
+    public function saleUnitLabel(): string
+    {
+        if (! $this->sale_unit || ! $this->product?->isCase()) {
+            return '';
+        }
+
+        return $this->sale_unit === 'case' ? __('common.case') : __('common.piece');
     }
 }

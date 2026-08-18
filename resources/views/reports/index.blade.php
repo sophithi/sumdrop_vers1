@@ -1,9 +1,9 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 @php use App\Helpers\CurrencyHelper; @endphp
 
-@section('title', 'Sales Report')
-@section('page-title', 'Sales Report')
-@section('page-subtitle', 'Daily and monthly sales summary.')
+@section('title', __('reports.title'))
+@section('page-title', __('reports.title'))
+@section('page-subtitle', __('reports.page_subtitle'))
 @section('page-actions')
     <!-- <a href="{{ route('dashboard') }}" class="btn btn-secondary">Back to POS</a> -->
 @endsection
@@ -99,12 +99,12 @@
 @section('content')
     <!-- Date Filter -->
     <div class="filter-section">
-        <h3>Filter by Date</h3>
+        <h3>{{ __('reports.filter_by_date') }}</h3>
         <form method="GET" action="{{ route('reports.index') }}" class="filter-controls">
             <div>
-                <label>Day</label>
+                <label>{{ __('reports.day') }}</label>
                 <select name="day">
-                    <option value="">All Days</option>
+                    <option value="">{{ __('reports.all_days') }}</option>
                     @foreach($availableDays as $day)
                         <option value="{{ $day }}" {{ request('day') == $day ? 'selected' : '' }}>
                             {{ str_pad($day, 2, '0', STR_PAD_LEFT) }}
@@ -112,11 +112,11 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <div>
-                <label>Month</label>
+                <label>{{ __('reports.month') }}</label>
                 <select name="month">
-                    <option value="">All Months</option>
+                    <option value="">{{ __('reports.all_months') }}</option>
                     @foreach($availableMonths as $month)
                         <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
                             {{ \Carbon\Carbon::createFromFormat('m', $month)->format('F') }}
@@ -124,42 +124,42 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <div class="filter-actions">
-                <button type="submit" style="padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Filter</button>
-                <a href="{{ route('reports.index') }}" style="padding: 0.6rem 1rem; background: #e2e8f0; color: #0f172a; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block;">Reset</a>
+                <button type="submit" style="padding: 0.6rem 1.2rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">{{ __('common.filter') }}</button>
+                <a href="{{ route('reports.index') }}" style="padding: 0.6rem 1rem; background: #e2e8f0; color: #0f172a; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block;">{{ __('reports.reset') }}</a>
             </div>
         </form>
         @if(request()->filled('day') || request()->filled('month'))
             <div style="background: #eff6ff; padding: 0.75rem 1rem; border-radius: 8px; margin-top: 1rem; border-left: 4px solid #2563eb; color: #0c4a6e; font-weight: 500;">
-                Showing data for: <strong>{{ $filterPeriodLabel }}</strong>
+                {{ __('reports.showing_data_for') }} <strong>{{ $filterPeriodLabel }}</strong>
             </div>
         @endif
     </div>
 
     <!-- Summary Stats -->
     <section class="stats">
-        <div class="stat"><div class="label">Total Orders</div><div class="value">{{ $summary['orders_count'] }}</div></div>
-        <div class="stat"><div class="label">Today Orders</div><div class="value">{{ $summary['today_orders'] }}</div></div>
-        <div class="stat"><div class="label">Month Orders</div><div class="value">{{ $summary['month_orders'] }}</div></div>
-        <div class="stat"><div class="label">Purchases</div><div class="value">{{ $summary['purchase_count'] }}</div></div>
+        <div class="stat"><div class="label">{{ __('reports.total_orders') }}</div><div class="value">{{ $summary['orders_count'] }}</div></div>
+        <div class="stat"><div class="label">{{ __('reports.today_orders') }}</div><div class="value">{{ $summary['today_orders'] }}</div></div>
+        <div class="stat"><div class="label">{{ __('reports.month_orders') }}</div><div class="value">{{ $summary['month_orders'] }}</div></div>
+        <div class="stat"><div class="label">{{ __('menu.purchases') }}</div><div class="value">{{ $summary['purchase_count'] }}</div></div>
     </section>
 
     <!-- Sales Overview -->
     <section class="report-card panel">
-        <h3>Sales Overview</h3>
+        <h3>{{ __('reports.sales_overview') }}</h3>
         <div class="stats" style="margin-top:1rem;">
-            <div class="stat"><div class="label">Total USD</div><div class="value">{{ CurrencyHelper::format($summary['total_sales_usd'], 'usd') }}</div></div>
-            <div class="stat"><div class="label">Total KHR</div><div class="value">{{ CurrencyHelper::format($summary['total_sales_khr'], 'khr') }}</div></div>
-            <div class="stat"><div class="label">Today USD</div><div class="value">{{ CurrencyHelper::format($summary['today_sales_usd'], 'usd') }}</div></div>
-            <div class="stat"><div class="label">Today KHR</div><div class="value">{{ CurrencyHelper::format($summary['today_sales_khr'], 'khr') }}</div></div>
+            <div class="stat"><div class="label">{{ __('reports.total_usd') }}</div><div class="value">{{ CurrencyHelper::format($summary['total_sales_usd'], 'usd') }}</div></div>
+            <div class="stat"><div class="label">{{ __('reports.total_khr') }}</div><div class="value">{{ CurrencyHelper::format($summary['total_sales_khr'], 'khr') }}</div></div>
+            <div class="stat"><div class="label">{{ __('reports.today_usd') }}</div><div class="value">{{ CurrencyHelper::format($summary['today_sales_usd'], 'usd') }}</div></div>
+            <div class="stat"><div class="label">{{ __('reports.today_khr') }}</div><div class="value">{{ CurrencyHelper::format($summary['today_sales_khr'], 'khr') }}</div></div>
         </div>
     </section>
 
     <!-- Daily Sales Chart -->
     @if($dailySales->count() > 0)
     <section class="panel">
-        <h3>Daily Sales Trend</h3>
+        <h3>{{ __('reports.daily_sales_trend') }}</h3>
         <div class="chart-container">
             <canvas id="dailySalesChart"></canvas>
         </div>
@@ -169,7 +169,7 @@
     <!-- Payment Method Chart -->
     @if($paymentBreakdown->count() > 0)
     <section class="panel">
-        <h3>Payment Method Breakdown</h3>
+        <h3>{{ __('reports.payment_method_breakdown') }}</h3>
         <div class="report-chart-grid">
             <div class="chart-container">
                 <canvas id="paymentMethodChart"></canvas>
@@ -177,10 +177,10 @@
             <div>
                 <table class="table-list" style="width:100%;">
                     <thead>
-                        <tr><th>Method</th><th>Count</th><th>Total USD</th><th>Total KHR</th></tr>
+                        <tr><th>{{ __('reports.method') }}</th><th>{{ __('reports.count') }}</th><th>{{ __('reports.total_usd') }}</th><th>{{ __('reports.total_khr') }}</th></tr>
                     </thead>
                     <tbody>
-                        @foreach(['cash' => 'Cash', 'mobile' => 'Mobile'] as $key => $label)
+                        @foreach(['cash' => __('common.payment_cash'), 'mobile' => __('common.payment_mobile')] as $key => $label)
                             <tr>
                                 <td>{{ $label }}</td>
                                 <td>{{ $summary["{$key}_count"] }}</td>
@@ -196,54 +196,65 @@
     @endif
 
     <section class="panel">
-        <h3>Product Sales Today</h3>
+        <h3>{{ __('reports.product_sales_today') }}</h3>
         <table class="table-list" style="width:100%; margin-top:1rem;">
-            <thead><tr><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr></thead>
+            <thead><tr><th>{{ __('common.product') }}</th><th>{{ __('reports.qty_sold') }}</th><th>{{ __('reports.revenue') }}</th></tr></thead>
             <tbody>
                 @forelse($todayProductSales as $item)
                     <tr>
-                        <td>{{ $item->product->name ?? 'Unknown' }}</td>
+                        <td>{{ $item->product->name ?? __('reports.unknown_product') }}</td>
                         <td>{{ $item->quantity_sold }}</td>
                         <td>{{ CurrencyHelper::format($item->sales_total, $item->currency) }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="3" class="field-error" style="text-align:center;">No product sales recorded for today.</td></tr>
+                    <tr><td colspan="3" class="field-error" style="text-align:center;">{{ __('reports.no_product_sales_today') }}</td></tr>
                 @endforelse
             </tbody>
         </table>
     </section>
 
     <section class="panel">
-        <h3>Product Sales This Month</h3>
+        <h3>{{ __('reports.product_sales_this_month') }}</h3>
         <table class="table-list" style="width:100%; margin-top:1rem;">
-            <thead><tr><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr></thead>
+            <thead><tr><th>{{ __('common.product') }}</th><th>{{ __('reports.qty_sold') }}</th><th>{{ __('reports.revenue') }}</th></tr></thead>
             <tbody>
                 @forelse($monthProductSales as $item)
                     <tr>
-                        <td>{{ $item->product->name ?? 'Unknown' }}</td>
+                        <td>{{ $item->product->name ?? __('reports.unknown_product') }}</td>
                         <td>{{ $item->quantity_sold }}</td>
                         <td>{{ CurrencyHelper::format($item->sales_total, $item->currency) }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="3" class="field-error" style="text-align:center;">No product sales recorded for this month.</td></tr>
+                    <tr><td colspan="3" class="field-error" style="text-align:center;">{{ __('reports.no_product_sales_month') }}</td></tr>
                 @endforelse
             </tbody>
         </table>
     </section>
 
-   
+
+    @php
+        $reportsText = [
+            'khr' => __('reports.khr_label'),
+            'usd' => __('reports.usd_label'),
+            'cash' => __('common.payment_cash'),
+            'mobile' => __('common.payment_mobile'),
+            'bank' => __('common.payment_bank'),
+        ];
+    @endphp
 
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script>
+        const reportsText = @json($reportsText);
+
         // Prepare data for Daily Sales Chart
         const dailySalesData = @json($dailySales);
-        
+
         if (dailySalesData.length > 0) {
             const dates = [];
             const khrValues = [];
             const usdValues = [];
-            
+
             dailySalesData.forEach(item => {
                 const dateStr = item.date;
                 if (!dates.includes(dateStr)) {
@@ -267,7 +278,7 @@
                         labels: dates.map(d => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
                         datasets: [
                             {
-                                label: 'KHR (៛)',
+                                label: reportsText.khr,
                                 data: khrValues,
                                 borderColor: '#2563eb',
                                 backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -275,7 +286,7 @@
                                 fill: true
                             },
                             {
-                                label: 'USD ($)',
+                                label: reportsText.usd,
                                 data: usdValues,
                                 borderColor: '#10b981',
                                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -304,12 +315,12 @@
 
         // Payment Method Chart
         const paymentData = @json($paymentBreakdown);
-        
+
         if (paymentData.length > 0) {
             const methods = [];
             const counts = [];
             const colors = ['#2563eb', '#10b981'];
-            
+
             paymentData.forEach((item, idx) => {
                 if (methods.indexOf(item.payment_method) === -1) {
                     methods.push(item.payment_method);
@@ -324,7 +335,7 @@
                 new Chart(paymentCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: methods.map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                        labels: methods.map(m => reportsText[m] || (m.charAt(0).toUpperCase() + m.slice(1))),
                         datasets: [{
                             data: counts,
                             backgroundColor: colors.slice(0, methods.length),

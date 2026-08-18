@@ -38,6 +38,6 @@ class PurchaseController extends Controller
             'note' => $request->input('note'),
         ]);
 
-        return redirect()->route('purchases.index')->with('success', 'Purchase recorded successfully.');
+        return redirect()->route('purchases.index')->with('success', __('common.purchase_recorded'));
     }
 }

@@ -1,10 +1,10 @@
-﻿@extends('layouts.admin')
+@extends('layouts.admin')
 
-@section('title', 'Create Category')
-@section('page-title', 'Create Category')
-@section('page-subtitle', 'Add a new category for your menu.')
+@section('title', __('categories.create_title'))
+@section('page-title', __('categories.create_title'))
+@section('page-subtitle', __('categories.create_subtitle'))
 @section('page-actions')
-    <a href="{{ route('categories.index') }}" class="btn btn-secondary">Back to Categories</a>
+    <a href="{{ route('categories.index') }}" class="btn btn-secondary">{{ __('categories.back_to_categories') }}</a>
 @endsection
 
 @section('content')
@@ -14,24 +14,24 @@
 
             @if($errors->any())
                 <div class="alert-error">
-                    Please fix the errors below.
+                    {{ __('common.fix_errors') }}
                 </div>
             @endif
 
             <div class="field">
-                <label for="name">Name</label>
+                <label for="name">{{ __('common.name') }}</label>
                 <input id="name" name="name" type="text" value="{{ old('name') }}" required>
                 @error('name')<div class="field-error">{{ $message }}</div>@enderror
             </div>
 
             <div class="field">
-                <label for="slug">Slug</label>
-                <input id="slug" name="slug" type="text" value="{{ old('slug') }}" placeholder="auto-generated">
+                <label for="slug">{{ __('categories.slug') }}</label>
+                <input id="slug" name="slug" type="text" value="{{ old('slug') }}" placeholder="{{ __('categories.slug_placeholder') }}">
                 @error('slug')<div class="field-error">{{ $message }}</div>@enderror
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn">Save Category</button>
+                <button type="submit" class="btn">{{ __('categories.save_category') }}</button>
             </div>
         </form>
     </div>
