@@ -52,7 +52,10 @@ return [
     'cases' => 'Cases',
     'piece' => 'Piece',
     'pieces' => 'Pieces',
-    'pack' => 'pack',
+    'pack' => 'Pack',
+    'can' => 'Can',
+    'box' => 'Box',
+    'glass' => 'Glass',
     'single' => 'Single',
 
     // Payment methods

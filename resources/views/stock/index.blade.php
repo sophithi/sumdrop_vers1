@@ -380,7 +380,10 @@
 @php
     $stockText = [
         'case' => __('common.case'),
-        'cases' => __('common.cases'),
+        'can' => __('common.can'),
+        'pack' => __('common.pack'),
+        'box' => __('common.box'),
+        'glass' => __('common.glass'),
         'piece' => __('common.piece'),
         'pieces' => __('common.pieces'),
         'outOfStock' => __('stock.out_of_stock'),
@@ -416,8 +419,10 @@
         if (outEl) outEl.textContent = out;
     }
 
+    const CASE_LIKE_UNITS = ['case', 'can', 'pack', 'box', 'glass'];
+
     function formatStockDisplay(stock, unit, packQuantity) {
-        if (unit !== 'case' || !packQuantity) {
+        if (!CASE_LIKE_UNITS.includes(unit) || !packQuantity) {
             return String(stock);
         }
 
@@ -428,7 +433,7 @@
             return remainder + ' ' + (remainder === 1 ? stockText.piece : stockText.pieces);
         }
 
-        let label = cases + ' ' + (cases === 1 ? stockText.case : stockText.cases);
+        let label = cases + ' ' + (stockText[unit] || stockText.case);
         if (remainder > 0) {
             label += ' + ' + remainder + ' ' + (remainder === 1 ? stockText.piece : stockText.pieces);
         }

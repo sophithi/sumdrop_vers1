@@ -10,6 +10,12 @@ class Product extends Model
 {
     use HasFactory;
 
+    /**
+     * Unit values that mean "sold in a package with a quantity inside" — as opposed
+     * to 'piece', a single loose item. The specific word just changes the label shown.
+     */
+    public const CASE_LIKE_UNITS = ['case', 'can', 'pack', 'box', 'glass'];
+
     protected $fillable = [
         'category_id',
         'name',
@@ -101,23 +107,35 @@ class Product extends Model
     }
 
     /**
-     * Whether this product is sold as a sealed case/pack rather than a single piece
+     * Whether this product is sold as a sealed package (case/can/pack/box) rather
+     * than a single piece.
      */
     public function isCase(): bool
     {
-        return $this->unit === 'case';
+        return in_array($this->unit, self::CASE_LIKE_UNITS, true);
     }
 
     /**
-     * Human-readable unit label, e.g. "Case (24/pack)" or "Piece"
+     * Human-readable name for a unit value, e.g. "Case", "Can", "Piece" — falls back
+     * to "Piece" for 'piece' and anything unrecognized.
+     */
+    public static function unitName(?string $unit): string
+    {
+        return in_array($unit, self::CASE_LIKE_UNITS, true)
+            ? __('common.' . $unit)
+            : __('common.piece');
+    }
+
+    /**
+     * Human-readable unit label, e.g. "Case (24)" or "Piece"
      */
     public function getUnitLabel(): string
     {
-        if ($this->isCase() && $this->pack_quantity) {
-            return __('common.case') . " ({$this->pack_quantity}/" . __('common.pack') . ')';
-        }
+        $name = self::unitName($this->unit);
 
-        return $this->isCase() ? __('common.case') : __('common.piece');
+        return $this->isCase() && $this->pack_quantity
+            ? "{$name} ({$this->pack_quantity})"
+            : $name;
     }
 
     /**
@@ -177,7 +195,7 @@ class Product extends Model
             return $remainder . ' ' . __($remainder === 1 ? 'common.piece' : 'common.pieces');
         }
 
-        $label = $cases . ' ' . __($cases === 1 ? 'common.case' : 'common.cases');
+        $label = $cases . ' ' . self::unitName($this->unit);
 
         if ($remainder > 0) {
             $label .= ' + ' . $remainder . ' ' . __($remainder === 1 ? 'common.piece' : 'common.pieces');

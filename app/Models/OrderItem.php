@@ -67,6 +67,6 @@ class OrderItem extends Model
             return '';
         }
 
-        return $this->sale_unit === 'case' ? __('common.case') : __('common.piece');
+        return $this->sale_unit === 'case' ? Product::unitName($this->product->unit) : __('common.piece');
     }
 }

@@ -367,8 +367,6 @@
             <div style="font-size: 0.9rem; opacity: 0.7;">{{ __('dashboard.quick_view_reports_desc') }}</div>
         </a>
     </div>
-
-
     <!-- Key Metrics -->
     <div class="overview-grid">
         <div class="metric-card primary">

@@ -48,11 +48,14 @@ return [
     'none' => 'គ្មាន',
     'all' => 'ទាំងអស់',
     'currency' => 'រូបិយប័ណ្ណ',
-    'case' => 'ប្រអប់',
-    'cases' => 'ប្រអប់',
+    'case' => 'កេស',
+    'cases' => 'កេស',
     'piece' => 'ដុំ',
     'pieces' => 'ដុំ',
     'pack' => 'កញ្ចប់',
+    'can' => 'កំប៉ុង',
+    'box' => 'ប្រអប់',
+    'glass' => 'កែវ',
     'single' => 'មួយដុំ',
 
     // Payment methods

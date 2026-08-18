@@ -87,13 +87,18 @@
             <div class="field-row">
                 <div class="field">
                     <label for="unit">{{ __('products.sold_as') }}</label>
-                    <select id="unit" name="unit" onchange="document.getElementById('pack_quantity_field').style.display = this.value === 'case' ? 'block' : 'none'; document.getElementById('piece_pricing_field').style.display = this.value === 'case' ? 'block' : 'none';">
+                    <select id="unit" name="unit" onchange="const isCaseLike = ['case','can','pack','box','glass'].includes(this.value); document.getElementById('pack_quantity_field').style.display = isCaseLike ? 'block' : 'none'; document.getElementById('piece_pricing_field').style.display = isCaseLike ? 'block' : 'none';">
                         <option value="piece" @selected(old('unit', $product->unit ?? 'piece') === 'piece')>{{ __('common.piece') }}</option>
-                        <option value="case" @selected(old('unit', $product->unit) === 'case')>{{ __('products.case_pack') }}</option>
+                        <option value="case" @selected(old('unit', $product->unit) === 'case')>{{ __('common.case') }}</option>
+                        <option value="can" @selected(old('unit', $product->unit) === 'can')>{{ __('common.can') }}</option>
+                        <option value="pack" @selected(old('unit', $product->unit) === 'pack')>{{ __('common.pack') }}</option>
+                        <option value="box" @selected(old('unit', $product->unit) === 'box')>{{ __('common.box') }}</option>
+                        <option value="glass" @selected(old('unit', $product->unit) === 'glass')>{{ __('common.glass') }}</option>
                     </select>
                     @error('unit')<div class="field-error">{{ $message }}</div>@enderror
                 </div>
-                <div class="field" id="pack_quantity_field" style="display: {{ old('unit', $product->unit) === 'case' ? 'block' : 'none' }};">
+                @php $isCaseLikeOld = in_array(old('unit', $product->unit), ['case', 'can', 'pack', 'box', 'glass'], true); @endphp
+                <div class="field" id="pack_quantity_field" style="display: {{ $isCaseLikeOld ? 'block' : 'none' }};">
                     <label for="pack_quantity">{{ __('products.units_per_case') }}</label>
                     <input id="pack_quantity" name="pack_quantity" type="number" min="1" value="{{ old('pack_quantity', $product->pack_quantity) }}" placeholder="{{ __('products.eg_24') }}">
                     <small style="color: #64748b; display: block; margin-top: 0.25rem;">{{ __('products.pack_quantity_help') }}</small>
@@ -101,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="field-row" id="piece_pricing_field" style="display: {{ old('unit', $product->unit) === 'case' ? 'block' : 'none' }};">
+            <div class="field-row" id="piece_pricing_field" style="display: {{ $isCaseLikeOld ? 'block' : 'none' }};">
                 <div class="field">
                     <label for="price_khr_piece">{{ __('products.piece_price_khr') }}</label>
                     <input id="price_khr_piece" name="price_khr_piece" type="number" value="{{ old('price_khr_piece', $product->price_khr_piece) }}" step="0.01">
