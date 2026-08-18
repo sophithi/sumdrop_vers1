@@ -1,0 +1,8 @@
+# Hostinger's Git deployment clones this whole repo into the web root, but Laravel's
+# front controller lives in public/. Transparently route every request through it
+# instead of moving files around on every deploy.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
