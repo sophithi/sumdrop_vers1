@@ -18,7 +18,7 @@ return [
     'add_one_case_title' => 'បន្ថែមប្រអប់ពេញមួយ',
     'add_case_btn' => '+1 ប្រអប់',
     'set_to_placeholder' => 'កំណត់ត្រឹម',
-    'no_products_match_filters' => 'រកមិនឃើញផលិតផលត្រូវនឹងតម្រងរបស់អ្នកទេ។',
+    'no_products_match_filters' => 'រកមិនឃើញផលិតផល។',
     'no_products_yet' => 'មិនទាន់មានផលិតផលនៅឡើយទេ។',
     'could_not_update_stock' => 'មិនអាចធ្វើបច្ចុប្បន្នភាពស្តុកបានទេ។',
     'enter_valid_stock' => 'សូមបញ្ចូលចំនួនស្តុកត្រឹមត្រូវ។',

@@ -9,7 +9,7 @@ return [
     'view' => 'មើល',
     'back' => 'ត្រឡប់',
     'search' => 'ស្វែងរក',
-    'filter' => 'តម្រង',
+    'filter' => 'ស្រង់តាម',
     'add' => 'បន្ថែម',
     'create' => 'បង្កើត',
     'update' => 'ធ្វើបច្ចុប្បន្នភាព',
@@ -18,7 +18,7 @@ return [
     'export' => 'នាំចេញ',
     'clear' => 'សម្អាត',
     'close' => 'បិទ',
-    'confirm_delete' => 'តើអ្នកប្រាកដជាចង់លុបធាតុនេះមែនទេ?',
+    'confirm_delete' => 'តើអ្នកប្រាកដជាចង់លុបមែនទេ?',
     'fix_errors' => 'សូមកែសម្រួលកំហុសខាងក្រោម។',
 
     // Table headers / field labels
@@ -59,7 +59,7 @@ return [
     'single' => 'មួយដុំ',
 
     // Payment methods
-    'payment_cash' => 'សាច់ប្រាក់',
+    'payment_cash' => 'សាច់ប្រាក់(លុយក្រៅ)',
     'payment_mobile' => 'ទូរស័ព្ទ',
     'payment_bank' => 'ធនាគារ',
 

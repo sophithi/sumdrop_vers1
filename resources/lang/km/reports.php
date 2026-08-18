@@ -4,7 +4,7 @@ return [
     'title' => 'របាយការណ៍លក់',
     'page_subtitle' => 'សេចក្តីសង្ខេបការលក់ប្រចាំថ្ងៃ និងប្រចាំខែ។',
 
-    'filter_by_date' => 'តម្រងតាមកាលបរិច្ឆេទ',
+    'filter_by_date' => 'តាមកាលបរិច្ឆេទ',
     'day' => 'ថ្ងៃ',
     'all_days' => 'គ្រប់ថ្ងៃ',
     'month' => 'ខែ',
@@ -22,7 +22,7 @@ return [
     'today_usd' => 'ថ្ងៃនេះ USD',
     'today_khr' => 'ថ្ងៃនេះ KHR',
 
-    'daily_sales_trend' => 'និន្នាការការលក់ប្រចាំថ្ងៃ',
+    'daily_sales_trend' => 'ការលក់ប្រចាំថ្ងៃ',
     'payment_method_breakdown' => 'ការបំបែកតាមវិធីសាស្ត្រទូទាត់',
     'method' => 'វិធីសាស្ត្រ',
     'count' => 'ចំនួន',

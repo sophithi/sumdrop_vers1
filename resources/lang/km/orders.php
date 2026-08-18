@@ -10,7 +10,7 @@ return [
 
     // Order detail / receipt page
     'order_hash' => 'ការបញ្ជាទិញ #',
-    'receipt_number_label' => 'លេខវិក្កយបត្រ៖',
+    'receipt_number_label' => 'លេខវិក្ក័យបត្រ៖',
     'barista_label' => 'បារីស្តា៖',
     'staff_fallback' => 'បុគ្គលិក',
     'date_label' => 'កាលបរិច្ឆេទ៖',

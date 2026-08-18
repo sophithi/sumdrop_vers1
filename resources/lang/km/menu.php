@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'brand' => 'SumDrop POS',
+    'brand' => 'SumDrop_coffee POS',
     'admin_workspace' => 'ទីតាំងការងាររបស់អ្នកគ្រប់គ្រង',
     'dashboard' => 'ផ្ទាំងទិន្នន័យទូទៅ',
     'pos' => 'លក់ទំនិញ',
