@@ -42,7 +42,7 @@ class ProductController extends Controller
             'stock' => ['nullable', 'integer', 'min:0'],
             'size' => ['nullable', 'string', 'max:20'],
             'unit' => ['required', 'in:piece,case,can,pack,box,glass'],
-            'pack_quantity' => ['nullable', 'required_if:unit,case,can,pack,box,glass', 'integer', 'min:1'],
+            'pack_quantity' => ['nullable', 'required_if:unit,case', 'integer', 'min:1'],
             'price_khr_piece' => ['nullable', 'numeric', 'min:0'],
             'price_usd_piece' => ['nullable', 'numeric', 'min:0'],
         ]);
@@ -62,7 +62,7 @@ class ProductController extends Controller
         }
 
         $priceUsd = $validated['price_usd'] ?? round($validated['price_khr'] / 4100, 2);
-        $sellsByPiece = in_array($validated['unit'], Product::CASE_LIKE_UNITS, true) && ! empty($validated['price_khr_piece']);
+        $sellsByPiece = $validated['unit'] === 'case' && ! empty($validated['price_khr_piece']);
         $priceUsdPiece = $sellsByPiece
             ? ($validated['price_usd_piece'] ?? round($validated['price_khr_piece'] / 4100, 2))
             : null;
@@ -79,7 +79,7 @@ class ProductController extends Controller
             'stock' => $validated['stock'] ?? 0,
             'size' => $validated['size'] ?? null,
             'unit' => $validated['unit'],
-            'pack_quantity' => in_array($validated['unit'], Product::CASE_LIKE_UNITS, true) ? $validated['pack_quantity'] : null,
+            'pack_quantity' => $validated['unit'] === 'case' ? $validated['pack_quantity'] : null,
             'price_khr_piece' => $sellsByPiece ? $validated['price_khr_piece'] : null,
             'price_usd_piece' => $priceUsdPiece,
         ]);
@@ -112,7 +112,7 @@ class ProductController extends Controller
             'stock' => ['nullable', 'integer', 'min:0'],
             'size' => ['nullable', 'string', 'max:20'],
             'unit' => ['required', 'in:piece,case,can,pack,box,glass'],
-            'pack_quantity' => ['nullable', 'required_if:unit,case,can,pack,box,glass', 'integer', 'min:1'],
+            'pack_quantity' => ['nullable', 'required_if:unit,case', 'integer', 'min:1'],
             'price_khr_piece' => ['nullable', 'numeric', 'min:0'],
             'price_usd_piece' => ['nullable', 'numeric', 'min:0'],
         ]);
@@ -141,7 +141,7 @@ class ProductController extends Controller
         }
 
         $priceUsd = $validated['price_usd'] ?? round($validated['price_khr'] / 4100, 2);
-        $sellsByPiece = in_array($validated['unit'], Product::CASE_LIKE_UNITS, true) && ! empty($validated['price_khr_piece']);
+        $sellsByPiece = $validated['unit'] === 'case' && ! empty($validated['price_khr_piece']);
         $priceUsdPiece = $sellsByPiece
             ? ($validated['price_usd_piece'] ?? round($validated['price_khr_piece'] / 4100, 2))
             : null;
@@ -158,7 +158,7 @@ class ProductController extends Controller
             'stock' => $validated['stock'] ?? 0,
             'size' => $validated['size'] ?? null,
             'unit' => $validated['unit'],
-            'pack_quantity' => in_array($validated['unit'], Product::CASE_LIKE_UNITS, true) ? $validated['pack_quantity'] : null,
+            'pack_quantity' => $validated['unit'] === 'case' ? $validated['pack_quantity'] : null,
             'price_khr_piece' => $sellsByPiece ? $validated['price_khr_piece'] : null,
             'price_usd_piece' => $priceUsdPiece,
         ]);

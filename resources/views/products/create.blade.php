@@ -83,7 +83,7 @@
             <div class="field-row">
                 <div class="field">
                     <label for="unit">{{ __('products.sold_as') }}</label>
-                    <select id="unit" name="unit" onchange="const isCaseLike = ['case','can','pack','box','glass'].includes(this.value); document.getElementById('pack_quantity_field').style.display = isCaseLike ? 'block' : 'none'; document.getElementById('piece_pricing_field').style.display = isCaseLike ? 'block' : 'none';">
+                    <select id="unit" name="unit" onchange="const isCase = this.value === 'case'; document.getElementById('pack_quantity_field').style.display = isCase ? 'block' : 'none'; document.getElementById('piece_pricing_field').style.display = isCase ? 'block' : 'none';">
                         <option value="piece" @selected(old('unit', 'piece') === 'piece')>{{ __('common.piece') }}</option>
                         <option value="case" @selected(old('unit') === 'case')>{{ __('common.case') }}</option>
                         <option value="can" @selected(old('unit') === 'can')>{{ __('common.can') }}</option>
@@ -93,8 +93,8 @@
                     </select>
                     @error('unit')<div class="field-error">{{ $message }}</div>@enderror
                 </div>
-                @php $isCaseLikeOld = in_array(old('unit'), ['case', 'can', 'pack', 'box', 'glass'], true); @endphp
-                <div class="field" id="pack_quantity_field" style="display: {{ $isCaseLikeOld ? 'block' : 'none' }};">
+                @php $isCaseOld = old('unit') === 'case'; @endphp
+                <div class="field" id="pack_quantity_field" style="display: {{ $isCaseOld ? 'block' : 'none' }};">
                     <label for="pack_quantity">{{ __('products.units_per_case') }}</label>
                     <input id="pack_quantity" name="pack_quantity" type="number" min="1" value="{{ old('pack_quantity') }}" placeholder="{{ __('products.eg_24') }}">
                     <small style="color: #64748b; display: block; margin-top: 0.25rem;">{{ __('products.pack_quantity_help') }}</small>
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="field-row" id="piece_pricing_field" style="display: {{ $isCaseLikeOld ? 'block' : 'none' }};">
+            <div class="field-row" id="piece_pricing_field" style="display: {{ $isCaseOld ? 'block' : 'none' }};">
                 <div class="field">
                     <label for="price_khr_piece">{{ __('products.piece_price_khr') }}</label>
                     <input id="price_khr_piece" name="price_khr_piece" type="number" value="{{ old('price_khr_piece') }}" step="0.01">

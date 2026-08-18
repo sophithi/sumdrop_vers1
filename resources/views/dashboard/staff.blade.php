@@ -749,7 +749,7 @@
                             @if($product->size)
                                 <span class="size-chip">{{ $product->size }}</span>
                             @endif
-                            @if($product->isCase() && !$dual)
+                            @if($product->unit !== 'piece' && !$dual)
                                 <span class="badge badge-unit">{{ $product->getUnitLabel() }}</span>
                             @endif
                             <div class="card-meta">

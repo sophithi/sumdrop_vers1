@@ -51,7 +51,7 @@
                                         @if($product->size)
                                             <span class="badge badge-size">{{ $product->size }}</span>
                                         @endif
-                                        @if($product->isCase())
+                                        @if($product->unit !== 'piece')
                                             <span class="badge badge-unit">{{ $product->getUnitLabel() }}</span>
                                         @endif
                                         <br><small>{{ $product->sku }}</small>

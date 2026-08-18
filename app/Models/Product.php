@@ -11,10 +11,11 @@ class Product extends Model
     use HasFactory;
 
     /**
-     * Unit values that mean "sold in a package with a quantity inside" — as opposed
-     * to 'piece', a single loose item. The specific word just changes the label shown.
+     * Selectable unit words that have their own label (beyond the default 'piece').
+     * Only 'case' behaves as a breakable package (quantity + optional piece price) —
+     * the others are just alternate single-item labels, same behavior as 'piece'.
      */
-    public const CASE_LIKE_UNITS = ['case', 'can', 'pack', 'box', 'glass'];
+    public const NAMED_UNITS = ['case', 'can', 'pack', 'box', 'glass'];
 
     protected $fillable = [
         'category_id',
@@ -107,12 +108,13 @@ class Product extends Model
     }
 
     /**
-     * Whether this product is sold as a sealed package (case/can/pack/box) rather
-     * than a single piece.
+     * Whether this product is sold as a breakable case — the only unit with a
+     * quantity inside and an optional per-piece price. Other named units (can,
+     * pack, box, glass) are just alternate labels for a single-item sale.
      */
     public function isCase(): bool
     {
-        return in_array($this->unit, self::CASE_LIKE_UNITS, true);
+        return $this->unit === 'case';
     }
 
     /**
@@ -121,7 +123,7 @@ class Product extends Model
      */
     public static function unitName(?string $unit): string
     {
-        return in_array($unit, self::CASE_LIKE_UNITS, true)
+        return in_array($unit, self::NAMED_UNITS, true)
             ? __('common.' . $unit)
             : __('common.piece');
     }

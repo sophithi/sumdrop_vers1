@@ -323,7 +323,7 @@
                                         @if($product->size)
                                             <span class="badge badge-size">{{ $product->size }}</span>
                                         @endif
-                                        @if($product->isCase())
+                                        @if($product->unit !== 'piece')
                                             <span class="badge badge-unit">{{ $product->getUnitLabel() }}</span>
                                         @endif
                                     </div>
@@ -419,10 +419,8 @@
         if (outEl) outEl.textContent = out;
     }
 
-    const CASE_LIKE_UNITS = ['case', 'can', 'pack', 'box', 'glass'];
-
     function formatStockDisplay(stock, unit, packQuantity) {
-        if (!CASE_LIKE_UNITS.includes(unit) || !packQuantity) {
+        if (unit !== 'case' || !packQuantity) {
             return String(stock);
         }
 
@@ -433,7 +431,7 @@
             return remainder + ' ' + (remainder === 1 ? stockText.piece : stockText.pieces);
         }
 
-        let label = cases + ' ' + (stockText[unit] || stockText.case);
+        let label = cases + ' ' + stockText.case;
         if (remainder > 0) {
             label += ' + ' + remainder + ' ' + (remainder === 1 ? stockText.piece : stockText.pieces);
         }
